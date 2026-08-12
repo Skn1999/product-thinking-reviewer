@@ -54,8 +54,16 @@ This skill does not:
 
 ```bash
 npx product-decision-reviewer
-
-[How to install/use]
-
-[![npm version](https://badge.fury.io/js/product-decision-reviewer.svg)](https://www.npmjs.com/package/product-decision-reviewer)
 ```
+
+## Supported Environments
+
+✓ Claude Code
+✓ OpenAI Codex
+
+## Limitations
+
+This skill:
+- does not perform market research
+- does not design interfaces
+- does not replace domain experts

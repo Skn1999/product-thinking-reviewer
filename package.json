@@ -1,0 +1,26 @@
+{
+  "name": "product-thinking-reviewer",
+  "version": "1.0.0",
+  "description": "AI skill for evaluating product thinking and decisionsusing evidence, constraints, risk and uncertainty.",
+  "type": "module",
+  "bin": {
+    "ptr": "./bin/pdr.js",
+    "product-thinking-reviewer": "./bin/pdr.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "skill",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "ai-skill",
+    "product-management",
+    "decision-making",
+    "llm",
+    "agent-skills"
+  ],
+  "license": "Apache-2.0"
+}

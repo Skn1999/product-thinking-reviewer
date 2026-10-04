@@ -15,7 +15,7 @@
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --primary: #3b82f6;
-      --primary-glow: rgba(59, 130, 246, 0.15);
+      --primary-glow: rgba(59, 130, 246, 0.2);
       --stage-problem: #38bdf8;
       --stage-problem-bg: rgba(56, 189, 248, 0.12);
       --stage-solution: #a855f7;
@@ -43,12 +43,7 @@
       --stage-problem-bg: rgba(56, 189, 248, 0.15);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font);
       background-color: var(--bg);
@@ -58,10 +53,7 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1320px; margin: 0 auto; }
 
     /* Top Navigation / Toolbar */
     .toolbar {
@@ -73,82 +65,43 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
+    .brand { display: flex; align-items: center; gap: 0.75rem; }
     .brand-icon {
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       background: linear-gradient(135deg, #3b82f6, #8b5cf6);
       border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: white;
-      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: white; font-size: 14px;
       box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
     }
 
-    .brand-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .brand-subtitle {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .brand-title { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+    .brand-subtitle { font-size: 0.75rem; color: var(--text-muted); }
+    .actions { display: flex; align-items: center; gap: 0.5rem; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 0.85rem;
-      font-size: 0.82rem;
-      font-weight: 500;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-main);
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 500;
+      border-radius: 6px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text-main); cursor: pointer;
       transition: all 0.15s ease;
       text-decoration: none;
     }
+    .btn:hover { background: var(--bg-card-subtle); border-color: var(--border-focus); }
 
-    .btn:hover {
-      background: var(--bg-card-subtle);
-      border-color: var(--border-focus);
-    }
-
-    /* ==========================================================
-       2-COLUMN DESKTOP LAYOUT (Left Verdict, Right Analytical Content)
-       ========================================================== */
+    /* 2-COLUMN DESKTOP LAYOUT */
     .main-layout {
       display: grid;
-      grid-template-columns: 390px 1fr;
+      grid-template-columns: 380px 1fr;
       gap: 2rem;
       align-items: start;
     }
 
-    @media (max-width: 980px) {
-      .main-layout {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
+    @media (max-width: 1040px) {
+      .main-layout { grid-template-columns: 1fr; gap: 1.5rem; }
     }
 
-    /* LEFT COLUMN: Main Verdict Block (Sticky on Desktop) */
+    /* LEFT COLUMN: Verdict Sidebar */
     .verdict-sidebar {
       position: sticky;
       top: 1.5rem;
@@ -166,42 +119,19 @@
       position: relative;
       overflow: hidden;
     }
-
     .verdict-card::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
+      top: 0; left: 0; right: 0; height: 4px;
       background: linear-gradient(90deg, #38bdf8, #818cf8, #f59e0b);
     }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-
+    .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.25rem; }
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem;
+      border-radius: 9999px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
     }
-
-    .badge-stage {
-      background: var(--stage-problem-bg);
-      color: var(--stage-problem);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
+    .badge-stage { background: var(--stage-problem-bg); color: var(--stage-problem); border: 1px solid rgba(56, 189, 248, 0.3); }
 
     .verdict-banner {
       background: rgba(245, 158, 11, 0.14);
@@ -213,63 +143,19 @@
       align-items: center;
       justify-content: space-between;
     }
+    .verdict-tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); }
+    .verdict-status { font-size: 1.05rem; font-weight: 700; color: var(--status-validate); letter-spacing: -0.01em; }
 
-    .verdict-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-dim);
-    }
-
-    .verdict-status {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--status-validate);
-      letter-spacing: -0.01em;
-    }
-
-    .decision-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 0.85rem;
-      letter-spacing: -0.02em;
-    }
-
-    .decision-summary {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      line-height: 1.55;
-    }
+    .decision-title { font-size: 1.35rem; font-weight: 700; line-height: 1.35; margin-bottom: 0.85rem; letter-spacing: -0.02em; }
+    .decision-summary { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.55; }
 
     .meta-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.65rem; padding-top: 1rem; border-top: 1px solid var(--border);
     }
+    .meta-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; }
+    .meta-label { color: var(--text-dim); font-weight: 500; }
+    .meta-val { font-weight: 600; color: var(--text-main); }
 
-    .meta-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-    }
-
-    .meta-label {
-      color: var(--text-dim);
-      font-weight: 500;
-    }
-
-    .meta-val {
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    /* Left Critical Uncertainty Card */
     .alert-card {
       background: rgba(245, 158, 11, 0.08);
       border: 1px solid rgba(245, 158, 11, 0.3);
@@ -277,33 +163,15 @@
       border-radius: 8px;
       padding: 1.2rem;
     }
-
     .alert-title {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--status-validate);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.35rem;
+      display: flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; font-weight: 700;
+      color: var(--status-validate); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem;
     }
+    .alert-content { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
 
-    .alert-content {
-      font-size: 0.88rem;
-      color: var(--text-main);
-      line-height: 1.5;
-    }
+    /* RIGHT COLUMN: Main Analytical Body */
+    .content-column { display: flex; flex-direction: column; gap: 1.75rem; }
 
-    /* RIGHT COLUMN: Analytical Content */
-    .content-column {
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-    }
-
-    /* Section Card */
     .section-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -318,97 +186,228 @@
       align-items: center;
       margin-bottom: 1.25rem;
     }
-
     .section-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.5rem;
     }
-
-    .section-subtitle {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
+    .section-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; }
 
     /* ==========================================================
-       DEDICATED REASONING CHAIN FLOW (Prominent, Always Visible)
+       PATTERN: INTERACTIVE PIPELINE INSPECTOR WITH CASCADE STRESS-TEST
        ========================================================== */
-    .chain-container {
+    .chain-toolbar {
       display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-      margin-top: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
     }
 
-    .chain-step {
+    .chain-toggles { display: flex; gap: 0.4rem; }
+    .toggle-chip {
+      padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--bg-card-subtle); color: var(--text-muted); cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .toggle-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .toggle-chip:hover:not(.active) { background: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+
+    .chain-health-badge {
+      font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 9999px;
+      background: rgba(245, 158, 11, 0.12); color: var(--confidence-med); border: 1px solid rgba(245, 158, 11, 0.3);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* Pipeline Track */
+    .pipeline-track {
       display: grid;
-      grid-template-columns: 130px 1fr 140px;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.85rem 1.15rem;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .pipeline-track {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pipeline-node {
       background: var(--bg-card-subtle);
       border: 1px solid var(--border);
       border-radius: 8px;
-      transition: all 0.15s ease;
+      padding: 0.85rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
       position: relative;
+      user-select: none;
     }
 
-    .chain-step:hover {
+    .pipeline-node:hover {
       border-color: var(--border-focus);
-      transform: translateX(2px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .step-role {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .pipeline-node.selected {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
     }
 
-    .step-desc {
-      font-size: 0.9rem;
-      color: var(--text-main);
-      font-weight: 500;
-      line-height: 1.4;
+    .pipeline-node.selected::after {
+      content: "";
+      position: absolute;
+      bottom: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 8px 8px 0;
+      border-style: solid;
+      border-color: var(--primary) transparent transparent;
+      display: block;
+      width: 0;
     }
 
-    .step-status {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+    @media (max-width: 900px) {
+      .pipeline-node.selected::after { display: none; }
     }
 
-    .status-supported {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+    /* Dimming & Cascade Highlights */
+    .pipeline-node.dimmed {
+      opacity: 0.35;
+      filter: grayscale(0.5);
     }
 
-    .status-unknown {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.3);
+    .pipeline-node.cascade-broken {
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.12) !important;
+      animation: pulseRed 1.8s infinite;
     }
 
-    .status-assumed {
-      background: rgba(168, 85, 247, 0.15);
-      color: #c084fc;
-      border: 1px solid rgba(168, 85, 247, 0.3);
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
     }
 
-    .status-goal {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      border: 1px solid rgba(59, 130, 246, 0.3);
+    .node-header { display: flex; justify-content: space-between; align-items: center; }
+    .node-num { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .node-role { font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+    .node-state-pill {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem;
+      border-radius: 4px; display: inline-block;
+    }
+
+    .state-supported { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .state-unknown { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .state-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    .state-goal { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .state-broken { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+    /* Interactive Inspector Drawer */
+    .inspector-drawer {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-focus);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-top: 0.75rem;
+      position: relative;
+      animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes drawerSlide {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer-title-group { display: flex; align-items: center; gap: 0.75rem; }
+    .drawer-step-num {
+      width: 28px; height: 28px; border-radius: 6px; background: var(--primary);
+      color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+    }
+    .drawer-title { font-size: 1.05rem; font-weight: 700; }
+
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .drawer-grid { grid-template-columns: 1fr; }
+    }
+
+    .drawer-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .drawer-item-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim);
+    }
+    .drawer-item-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.45; }
+
+    /* Cascade Alert Banner */
+    .cascade-alert {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .cascade-alert.active { display: block; }
+    .cascade-alert-title {
+      font-size: 0.85rem; font-weight: 700; color: #ef4444; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.45rem;
+    }
+    .cascade-alert-desc { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
+
+    /* Drawer Actions */
+    .drawer-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .btn-stress {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+    .btn-stress:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+    }
+    .btn-stress.active {
+      background: #ef4444;
+      color: white;
     }
 
     /* Action Hero Card */
@@ -419,178 +418,53 @@
       padding: 1.35rem 1.5rem;
       margin-bottom: 1.25rem;
     }
-
     .action-hero-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.35rem;
+      font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 0.35rem;
     }
+    .action-hero-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.45rem; color: var(--text-main); }
+    .action-hero-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
-    .action-hero-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 0.45rem;
-      color: var(--text-main);
-    }
-
-    .action-hero-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Tabs for Deep-Dive Sections */
-    .tab-nav {
-      display: flex;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 1.25rem;
-      overflow-x: auto;
-    }
-
+    /* Tabs */
+    .tab-nav { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; overflow-x: auto; }
     .tab-btn {
-      padding: 0.55rem 0.95rem;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      font-weight: 500;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s ease;
-      white-space: nowrap;
+      padding: 0.55rem 0.95rem; background: none; border: none; color: var(--text-muted); font-size: 0.88rem;
+      font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s ease; white-space: nowrap;
     }
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeIn 0.2s ease-in-out; }
 
-    .tab-btn:hover {
-      color: var(--text-main);
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 600;
-    }
-
-    .tab-pane {
-      display: none;
-    }
-
-    .tab-pane.active {
-      display: block;
-      animation: fadeIn 0.2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(3px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Evidence Filters */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
-    }
-
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
     .filter-pill {
-      padding: 0.3rem 0.7rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border-radius: 9999px;
-      border: 1px solid var(--border);
-      background: var(--bg-card-subtle);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
+      padding: 0.3rem 0.7rem; font-size: 0.75rem; font-weight: 500; border-radius: 9999px;
+      border: 1px solid var(--border); background: var(--bg-card-subtle); color: var(--text-muted); cursor: pointer;
     }
+    .filter-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    .filter-pill:hover, .filter-pill.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .evidence-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
+    .evidence-list { display: flex; flex-direction: column; gap: 0.75rem; }
     .evidence-item {
-      padding: 0.9rem 1.15rem;
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
+      padding: 0.9rem 1.15rem; background: var(--bg-card-subtle); border: 1px solid var(--border);
+      border-radius: 8px; display: flex; flex-direction: column; gap: 0.35rem;
     }
-
-    .evidence-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .evidence-type-tag {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-    }
-
+    .evidence-top { display: flex; justify-content: space-between; align-items: center; }
+    .evidence-type-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 4px; }
     .tag-known { background: rgba(16, 185, 129, 0.15); color: #10b981; }
     .tag-believed { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
     .tag-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
     .tag-unknown { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
 
-    .evidence-text {
-      font-size: 0.9rem;
-      color: var(--text-main);
-    }
-
-    .evidence-meta {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-
     /* Checklist */
-    .checklist {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
-
+    .checklist { display: flex; flex-direction: column; gap: 0.65rem; }
     .check-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.85rem 1rem;
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.15s ease;
+      display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.85rem 1rem;
+      background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
     }
-
-    .check-item:hover {
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .check-item input[type="checkbox"] {
-      margin-top: 0.25rem;
-      width: 17px;
-      height: 17px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-
+    .check-item input[type="checkbox"] { margin-top: 0.25rem; width: 17px; height: 17px; accent-color: var(--primary); }
     .check-label { flex: 1; }
     .check-role { font-weight: 600; font-size: 0.88rem; color: var(--text-main); }
     .check-desc { font-size: 0.8rem; color: var(--text-muted); }
@@ -602,43 +476,25 @@
 
     /* Toast */
     .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1px solid #475569;
-      padding: 0.75rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.2s ease;
-      pointer-events: none;
-      z-index: 100;
+      position: fixed; bottom: 2rem; right: 2rem; background: #1e293b; color: #f8fafc;
+      border: 1px solid #475569; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.85rem;
+      opacity: 0; transform: translateY(10px); transition: all 0.2s ease; pointer-events: none; z-index: 100;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateY(0); }
 
     /* Print Styles */
     @media print {
       body { background: white !important; color: black !important; padding: 0; }
-      .toolbar, .tab-nav, .filter-bar, .actions, .toast { display: none !important; }
+      .toolbar, .tab-nav, .filter-bar, .actions, .toast, .chain-toolbar, .btn-stress { display: none !important; }
       .main-layout { display: block !important; }
       .verdict-sidebar { position: static !important; margin-bottom: 2rem; }
       .tab-pane { display: block !important; margin-bottom: 1.5rem; }
-      .verdict-card, .section-card, .alert-card, .action-hero { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
-      .badge, .step-status, .evidence-type-tag { border: 1px solid #999 !important; color: black !important; }
+      .verdict-card, .section-card, .alert-card, .action-hero, .inspector-drawer { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
     }
   </style>
 </head>
 <body data-theme="dark">
   <div class="container">
-    <!-- Header / Toolbar -->
     <header class="toolbar">
       <div class="brand">
         <div class="brand-icon">PTR</div>
@@ -648,7 +504,7 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn" id="copyBtn" onclick="copyExecutiveSummary()">
+        <button class="btn" onclick="copyExecutiveSummary()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           Copy Summary
         </button>
@@ -656,20 +512,13 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
           Print / PDF
         </button>
-        <button class="btn" id="themeToggle" onclick="toggleTheme()">
-          <span id="themeIcon">☀️</span>
-        </button>
+        <button class="btn" onclick="toggleTheme()"><span id="themeIcon">☀️</span></button>
       </div>
     </header>
 
-    <!-- 2-COLUMN MAIN LAYOUT -->
     <main class="main-layout">
-      
-      <!-- ==============================================
-           LEFT COLUMN: Main Verdict Block & Uncertainty
-           ============================================== -->
+      <!-- LEFT COLUMN: Main Verdict Block -->
       <aside class="verdict-sidebar">
-        <!-- Main Verdict Card -->
         <div class="verdict-card">
           <div class="badge-row">
             <span class="badge badge-stage">Problem Validation</span>
@@ -677,7 +526,6 @@
             <span class="badge" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">Risk: Med-High</span>
           </div>
 
-          <!-- Prominent Recommendation Verdict Banner -->
           <div class="verdict-banner">
             <span class="verdict-tag">Verdict</span>
             <span class="verdict-status">Validate First</span>
@@ -685,7 +533,7 @@
 
           <h1 class="decision-title">Should we build an AI onboarding assistant?</h1>
           <p class="decision-summary">
-            The proposal frames a solution as the problem. While onboarding activation dropped by 12%, current evidence does not prove that an AI assistant addresses the underlying setup friction. Validate drop-offs before building.
+            The proposal frames a feature as the problem. While onboarding activation dropped by 12%, current evidence does not prove that an AI assistant addresses the underlying setup friction. Validate drop-offs before building.
           </p>
 
           <div class="meta-list">
@@ -708,7 +556,6 @@
           </div>
         </div>
 
-        <!-- Critical Uncertainty Box (Anchored in Left Column) -->
         <div class="alert-card">
           <div class="alert-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -720,58 +567,150 @@
         </div>
       </aside>
 
-      <!-- ==============================================
-           RIGHT COLUMN: Analytical Body & Dedicated Chain
-           ============================================== -->
+      <!-- RIGHT COLUMN: Analytical Body & Interactive Pipeline Inspector -->
       <section class="content-column">
         
-        <!-- 1. DEDICATED REASONING CHAIN (Prominent, Moved Out of Tabs) -->
+        <!-- 1. DEDICATED INTERACTIVE REASONING CHAIN INSPECTOR -->
         <div class="section-card">
           <div class="section-header">
             <div>
               <h2 class="section-title">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                Decision Reasoning Chain
+                Decision Reasoning Chain Inspector
               </h2>
-              <p class="section-subtitle">Evaluating the 6-link logic chain from problem observation to long-term impact</p>
+              <p class="section-subtitle">Click any node to inspect evidence, assumptions, or stress-test downstream failure cascades</p>
             </div>
           </div>
 
-          <div class="chain-container">
-            <div class="chain-step">
-              <span class="step-role">1. Problem</span>
-              <span class="step-desc">New users fail to complete onboarding setup</span>
-              <span class="step-status status-supported">Supported (Data)</span>
+          <!-- Chain Triage Toolbar -->
+          <div class="chain-toolbar">
+            <div class="chain-toggles">
+              <button class="toggle-chip active" id="chip-all" onclick="setChainFilter('all')">All Links (6)</button>
+              <button class="toggle-chip" id="chip-gaps" onclick="setChainFilter('gaps')">⚠️ Highlight Breaks (2)</button>
+            </div>
+            <div class="chain-health-badge">
+              <span id="health-icon">⚠️</span>
+              <span id="health-text">Chain Integrity: 42% (2 Critical Gaps)</span>
+            </div>
+          </div>
+
+          <!-- Interactive Pipeline Track -->
+          <div class="pipeline-track" id="pipelineTrack">
+            <!-- Node 1 -->
+            <div class="pipeline-node selected" id="node-1" onclick="inspectNode(1)">
+              <div class="node-header">
+                <span class="node-num">Step 1</span>
+                <span class="node-state-pill state-supported">Data</span>
+              </div>
+              <div class="node-role">Problem</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Activation -12%</div>
             </div>
 
-            <div class="chain-step">
-              <span class="step-role">2. Root Cause</span>
-              <span class="step-desc">Unclear configuration vs. UI cognitive overload</span>
-              <span class="step-status status-unknown">Unknown</span>
+            <!-- Node 2 -->
+            <div class="pipeline-node" id="node-2" onclick="inspectNode(2)">
+              <div class="node-header">
+                <span class="node-num">Step 2</span>
+                <span class="node-state-pill state-unknown">Gap</span>
+              </div>
+              <div class="node-role">Root Cause</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Cause Unclear</div>
             </div>
 
-            <div class="chain-step">
-              <span class="step-role">3. Intervention</span>
-              <span class="step-desc">Build interactive AI onboarding assistant</span>
-              <span class="step-status status-assumed">Proposed Solution</span>
+            <!-- Node 3 -->
+            <div class="pipeline-node" id="node-3" onclick="inspectNode(3)">
+              <div class="node-header">
+                <span class="node-num">Step 3</span>
+                <span class="node-state-pill state-assumed">Leap</span>
+              </div>
+              <div class="node-role">Intervention</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Build AI Chatbot</div>
             </div>
 
-            <div class="chain-step">
-              <span class="step-role">4. Behaviour</span>
-              <span class="step-desc">Users consult AI and resolve setup blockers faster</span>
-              <span class="step-status status-assumed">Assumed</span>
+            <!-- Node 4 -->
+            <div class="pipeline-node" id="node-4" onclick="inspectNode(4)">
+              <div class="node-header">
+                <span class="node-num">Step 4</span>
+                <span class="node-state-pill state-assumed">Assumed</span>
+              </div>
+              <div class="node-role">Behaviour</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Users Use Chatbot</div>
             </div>
 
-            <div class="chain-step">
-              <span class="step-role">5. Outcome</span>
-              <span class="step-desc">Onboarding completion rate returns to baseline</span>
-              <span class="step-status status-assumed">Unverified</span>
+            <!-- Node 5 -->
+            <div class="pipeline-node" id="node-5" onclick="inspectNode(5)">
+              <div class="node-header">
+                <span class="node-num">Step 5</span>
+                <span class="node-state-pill state-unknown">Unverified</span>
+              </div>
+              <div class="node-role">Outcome</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Setup Completes</div>
             </div>
 
-            <div class="chain-step">
-              <span class="step-role">6. Impact</span>
-              <span class="step-desc">Activation improves by +12%, reducing early churn</span>
-              <span class="step-status status-goal">Strategic Goal</span>
+            <!-- Node 6 -->
+            <div class="pipeline-node" id="node-6" onclick="inspectNode(6)">
+              <div class="node-header">
+                <span class="node-num">Step 6</span>
+                <span class="node-state-pill state-goal">Goal</span>
+              </div>
+              <div class="node-role">Impact</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">+12% Activation</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Cascade Alert Banner (Triggered during Stress Test) -->
+          <div class="cascade-alert" id="cascadeAlert">
+            <div class="cascade-alert-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              Downstream Cascade Failure Detected!
+            </div>
+            <div class="cascade-alert-desc" id="cascadeDesc"></div>
+          </div>
+
+          <!-- Inspector Drawer Details -->
+          <div class="inspector-drawer" id="inspectorDrawer">
+            <div class="drawer-header">
+              <div class="drawer-title-group">
+                <div class="drawer-step-num" id="d-num">1</div>
+                <div>
+                  <div class="drawer-title" id="d-title">Node 1: Problem Observation</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim);" id="d-subtitle">Status: Supported by Quantitative Telemetry</div>
+                </div>
+              </div>
+              <button class="btn btn-stress" id="btn-stress-toggle" onclick="toggleStressTest()">
+                <span>⚡ Stress-Test: What If This Breaks?</span>
+              </button>
+            </div>
+
+            <div class="drawer-grid">
+              <div class="drawer-item">
+                <span class="drawer-item-label">Stated Claim</span>
+                <div class="drawer-item-text" id="d-claim">New users fail to complete onboarding setup, causing activation rates to decrease.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Supporting Evidence & Source</span>
+                <div class="drawer-item-text" id="d-evidence">Product Analytics Q4 Telemetry (-12% activation across 4,200 signups). Highly reliable.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Inferential Leap / Risk Gap</span>
+                <div class="drawer-item-text" id="d-gap">Low inference gap. The metric establishes that the friction is real and measurable.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Recommended Verification Action</span>
+                <div class="drawer-item-text" id="d-action">Problem validity is confirmed. Proceed to diagnose the exact root cause of abandonment.</div>
+              </div>
+            </div>
+
+            <div class="drawer-footer">
+              <div style="font-size: 0.82rem; color: var(--text-muted);" id="d-hint">
+                👉 Click on Step 2 (Root Cause) or Step 3 (Intervention) to inspect the critical decision breaks.
+              </div>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn" onclick="navigateNode(-1)">← Previous</button>
+                <button class="btn" onclick="navigateNode(1)">Next →</button>
+              </div>
             </div>
           </div>
         </div>
@@ -802,7 +741,7 @@
           </div>
         </div>
 
-        <!-- 3. DEEP-DIVE TABS (Evidence Matrix, Stage Deep-Dive, Human Validation) -->
+        <!-- 3. DEEP-DIVE TABS -->
         <div class="section-card">
           <nav class="tab-nav">
             <button class="tab-btn active" onclick="switchTab(event, 'tab-evidence')">Evidence Map (5)</button>
@@ -964,7 +903,6 @@
 
   <div id="toast" class="toast">Executive summary copied to clipboard!</div>
 
-  <!-- Machine-readable metadata payload -->
   <script type="application/json" id="pdr-data">
   {
     "decisionTitle": "Should we build an AI onboarding assistant to fix setup drop-offs?",
@@ -984,6 +922,165 @@
   </script>
 
   <script>
+    // Node Data Registry
+    const chainData = {
+      1: {
+        num: 1,
+        title: "Node 1: Problem Observation",
+        subtitle: "Status: Supported by Telemetry",
+        claim: "New users fail to complete onboarding setup, causing activation rates to decrease.",
+        evidence: "Product Analytics Q4 Telemetry (-12% activation across 4,200 signups). Highly reliable.",
+        gap: "Low inference gap. The metric establishes that the friction is real and measurable.",
+        action: "Problem validity is confirmed. Proceed to diagnose the exact root cause of abandonment.",
+        hint: "👉 Click on Step 2 (Root Cause) or Step 3 (Intervention) to inspect the critical decision breaks.",
+        isBroken: false,
+        cascadeMessage: "If the Problem itself was unobserved or false, no intervention or roadmaps would be justified."
+      },
+      2: {
+        num: 2,
+        title: "Node 2: Root Cause Hypothesis",
+        subtitle: "Status: ⚠️ UNKNOWN (Critical Decision Break #1)",
+        claim: "Users abandon onboarding because configuration is cognitively confusing.",
+        evidence: "Customer success anecdotes and 15 feature requests for AI. No event-level drop-off data.",
+        gap: "HIGH VULNERABILITY. Customer feedback mentions 'confusion', but root cause could be missing setup credentials, long forms, or poor timing.",
+        action: "Run screen-by-screen drop-off telemetry and interview 5 dropped users before committing build.",
+        hint: "⚡ Click 'Stress-Test' to see what happens downstream if this root cause hypothesis is wrong!",
+        isBroken: true,
+        cascadeMessage: "CASCADE IMPACT: If the root cause is actually 'Missing API Keys' rather than 'UI Confusion', your proposed AI Chatbot (Step 3) has 0% problem-solution fit. 4-6 weeks of engineering will be completely wasted."
+      },
+      3: {
+        num: 3,
+        title: "Node 3: Proposed Intervention",
+        subtitle: "Status: ⚠️ ASSUMED (Solution Disguise)",
+        claim: "Building an AI onboarding chatbot will solve the setup bottleneck.",
+        evidence: "Stakeholder optimism and 15 requests for 'AI'. Zero prototype or experiment tests.",
+        gap: "LEAP OF FAITH. Assumes conversational AI is the right interaction model. A confusing form often just needs progressive disclosure, not an LLM.",
+        action: "Test lightweight inline defaults or form simplification before introducing chatbot infrastructure.",
+        hint: "⚡ Click 'Stress-Test' to see downstream failure cascade!",
+        isBroken: true,
+        cascadeMessage: "CASCADE IMPACT: If users dislike chatting with a bot while trying to configure an account, drop-off rates will increase further due to added cognitive load."
+      },
+      4: {
+        num: 4,
+        title: "Node 4: Expected Behaviour Change",
+        subtitle: "Status: Assumed",
+        claim: "Users will consult the AI assistant and successfully resolve their configuration blockers.",
+        evidence: "Assumed. Chat interface adoption in onboarding workflows is unverified.",
+        gap: "Users might ignore the chatbot, find responses too slow, or abandon upon seeing conversational prompts.",
+        action: "Validate user willingness to interact with conversational setup via clickable prototype.",
+        hint: "Check Step 2 and Step 3 to see the root cause gaps.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: If users ignore the chat widget, completion rates remain unchanged."
+      },
+      5: {
+        num: 5,
+        title: "Node 5: Desired Product Outcome",
+        subtitle: "Status: Unverified",
+        claim: "Onboarding completion rate returns to baseline (or improves by +15%).",
+        evidence: "Theoretical expectation contingent on Steps 2, 3, and 4 holding true.",
+        gap: "Directly dependent on the unverified root cause and intervention fit.",
+        action: "Set strict A/B testing criteria: require +10% lift in first 200 accounts to justify full rollout.",
+        hint: "Inspect upstream nodes to verify supporting chain.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: Target outcome will not materialize without verified root cause."
+      },
+      6: {
+        num: 6,
+        title: "Node 6: Long-term Business Impact",
+        subtitle: "Status: Strategic Goal",
+        claim: "+12% overall product activation, leading to higher trial-to-paid conversion.",
+        evidence: "Core SaaS financial model assumption.",
+        gap: "Target business metric; solid as a business outcome, but hinges entirely on upstream execution.",
+        action: "Protect engineering resources: enforce human review gates before committing sprint.",
+        hint: "Click 'All Links' or 'Highlight Breaks' to toggle view.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: Sunk cost: 6 weeks of engineering effort, delayed core roadmap items."
+      }
+    };
+
+    let currentNode = 1;
+    let isStressTesting = false;
+
+    function inspectNode(num) {
+      currentNode = num;
+      document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('selected'));
+      document.getElementById('node-' + num).classList.add('selected');
+
+      const data = chainData[num];
+      document.getElementById('d-num').textContent = data.num;
+      document.getElementById('d-title').textContent = data.title;
+      document.getElementById('d-subtitle').textContent = data.subtitle;
+      document.getElementById('d-claim').textContent = data.claim;
+      document.getElementById('d-evidence').textContent = data.evidence;
+      document.getElementById('d-gap').textContent = data.gap;
+      document.getElementById('d-action').textContent = data.action;
+      document.getElementById('d-hint').textContent = data.hint;
+
+      // Reset stress test when switching nodes unless on a broken link
+      if (isStressTesting) {
+        toggleStressTest();
+      }
+    }
+
+    function navigateNode(dir) {
+      let next = currentNode + dir;
+      if (next < 1) next = 6;
+      if (next > 6) next = 1;
+      inspectNode(next);
+    }
+
+    function setChainFilter(type) {
+      document.getElementById('chip-all').classList.toggle('active', type === 'all');
+      document.getElementById('chip-gaps').classList.toggle('active', type === 'gaps');
+
+      document.querySelectorAll('.pipeline-node').forEach((n, idx) => {
+        const stepNum = idx + 1;
+        if (type === 'gaps') {
+          if (!chainData[stepNum].isBroken) {
+            n.classList.add('dimmed');
+          } else {
+            n.classList.remove('dimmed');
+          }
+        } else {
+          n.classList.remove('dimmed');
+        }
+      });
+
+      if (type === 'gaps') {
+        inspectNode(2); // Jump to first critical gap
+      }
+    }
+
+    function toggleStressTest() {
+      isStressTesting = !isStressTesting;
+      const btn = document.getElementById('btn-stress-toggle');
+      const alertBox = document.getElementById('cascadeAlert');
+      const desc = document.getElementById('cascadeDesc');
+      const data = chainData[currentNode];
+
+      if (isStressTesting) {
+        btn.classList.add('active');
+        btn.innerHTML = '<span>⚡ Revert Stress-Test Simulation</span>';
+        alertBox.classList.add('active');
+        desc.textContent = data.cascadeMessage;
+
+        // Cascade failure to downstream nodes
+        for (let i = currentNode + 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.add('cascade-broken');
+        }
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<span>⚡ Stress-Test: What If This Breaks?</span>';
+        alertBox.classList.remove('active');
+
+        for (let i = 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.remove('cascade-broken');
+        }
+      }
+    }
+
     // Tab switching
     function switchTab(evt, tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1012,7 +1109,6 @@
       document.getElementById('progressFill').style.width = pct + '%';
       document.getElementById('progressText').textContent = `${checked} of ${total} Completed (${pct}%)`;
 
-      // Save to localStorage
       const state = {};
       document.querySelectorAll('.check-item input[type="checkbox"]').forEach((cb, idx) => {
         state[idx] = cb.checked;
@@ -1020,7 +1116,6 @@
       localStorage.setItem('pdr_validation_state', JSON.stringify(state));
     }
 
-    // Restore saved progress
     window.addEventListener('DOMContentLoaded', () => {
       const saved = localStorage.getItem('pdr_validation_state');
       if (saved) {
@@ -1034,7 +1129,6 @@
       }
     });
 
-    // Theme toggle
     function toggleTheme() {
       const body = document.body;
       const current = body.getAttribute('data-theme');
@@ -1043,7 +1137,6 @@
       document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
     }
 
-    // Copy executive summary
     function copyExecutiveSummary() {
       const summary = `Product Decision Review: AI Onboarding Assistant
 Decision Stage: PROBLEM_VALIDATION

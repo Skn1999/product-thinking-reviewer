@@ -254,15 +254,19 @@ The interactive HTML report must contain the following core visual sections arra
    - High-contrast alert card anchored directly under the verdict, isolating the #1 decision-critical unknown that could invalidate the decision.
 
 #### C. Right Column: Analytical Body & Deep-Dives
-1. **Dedicated Reasoning Chain (Permanent / Out of Tabs)**:
-   - Visual step-by-step flowchart mapping all 6 links:
+1. **Dedicated Reasoning Chain Inspector (Permanent / Out of Tabs)**:
+   - Must have its own dedicated, permanent space at the top of the right column (never tucked away inside a tab).
+   - **Triage Filter Toolbar**: Quick chips: `[ All Links (6) ]` and `[ ⚠️ Highlight Breaks ]`. Clicking `Highlight Breaks` dims solid links and spotlights unverified gaps.
+   - **6-Node Pipeline Track**: Interactive horizontal step cards mapping:
      `Problem → Root Cause → Intervention → Expected Behaviour → Outcome → Business Impact`
-   - Each node displays its role, clear description, and an evidence status tag:
-     - `Supported` (Green)
-     - `Partially Supported` (Blue)
-     - `Assumed` (Purple)
-     - `Unknown` (Amber)
-     - `Contradicted` (Red)
+     with status pills (`Supported`, `Unknown`, `Assumed`, `Goal`, `Contradicted`).
+   - **Interactive Node Inspector Drawer**: Clicking any node expands a drawer directly beneath the pipeline detailing:
+     - *Stated Claim* (the hypothesis asserted at this link)
+     - *Supporting Evidence & Source* (metrics, interviews, or telemetry)
+     - *Inferential Leap / Risk Gap* (the logical jump or assumption)
+     - *Recommended Verification Action* (concrete test to validate this link)
+   - **Downstream Cascade Stress-Tester (`⚡ Stress-Test: What If This Breaks?`)**:
+     An interactive button on each unverified node that simulates what happens if that hypothesis fails, triggering a red cascade through downstream nodes and rendering a dynamic alert banner warning of the domino impact (e.g., zero problem fit, persistent drop-off, or wasted engineering effort).
 2. **Recommended Next Action & Rationale**:
    - **Next Action Hero Card**: Highlighted actionable box containing the immediate next step, owner, and timeline.
    - **Rationale & Change Triggers Grid**: Side-by-side or stacked breakdown of why this action was selected and what specific findings or metrics would change this recommendation.

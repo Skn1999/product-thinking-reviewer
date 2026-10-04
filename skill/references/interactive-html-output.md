@@ -18,15 +18,22 @@ The goal is to produce a self-contained, visually intuitive, and interactive art
      - Decision metadata list (Owner, Commitment, Target Audience, Reversibility).
      - **Critical Uncertainty Alert Card** anchored directly under the verdict for immediate visibility.
    - **Right Column (Analytical Body)**:
-     - **Dedicated Reasoning Chain**: Always visible (NOT hidden behind tabs) with interconnected node cards and status badges (`Supported`, `Assumed`, `Unknown`, `Contradicted`).
+     - **Dedicated Reasoning Chain Inspector**: Permanently visible at the top of the right column (never hidden in tabs). Includes an interactive 6-node pipeline track, vulnerability filter, deep-dive inspector drawer, and a "What If?" cascade stress-test simulator.
      - **Recommended Next Action**: High-priority hero box with concrete action description, rationale, and change triggers.
      - **Deep-Dive Tabs**: Segmented tabs for *Evidence & Assumptions Matrix*, *Stage Deep-Dive* (e.g., Problem vs. Solution check or Solution Comparison table), and *Human Validation Gates* checklist.
-2. **Mobile / Tablet Responsiveness**:
-   - Automatically collapses to a clean single column under 980px with natural reading order.
-3. **100% Self-Contained**:
+2. **Interactive Reasoning Chain Inspector (Selected Pattern)**:
+   - **Pipeline Track**: 6 interconnected nodes (`Problem → Root Cause → Intervention → Behaviour → Outcome → Impact`) with status pills (`Supported`, `Unknown`, `Assumed`, `Goal`).
+   - **Triage Filter Toolbar**: `All Links` vs `Highlight Breaks` chip filters. Clicking `Highlight Breaks` dims verified steps and shines a spotlight on unverified gaps.
+   - **Inspector Drawer**: Clicking any node opens a synchronized drawer directly underneath showing:
+     - *Stated Claim*
+     - *Supporting Evidence & Source*
+     - *Inferential Leap / Risk Gap*
+     - *Recommended Verification Action*
+   - **Downstream Cascade Stress-Tester**: Clicking `⚡ Stress-Test: What If This Breaks?` simulates the failure of that link, triggers a warning cascade through downstream nodes (turning them red/pulsing), and displays a cascade impact alert explaining the domino effect of the assumption failure.
+3. **100% Self-Contained & Offline-Ready**:
    - Zero external CDN dependencies (no Google Fonts, Bootstrap, React, Tailwind CDN). Works completely offline and in secure air-gapped corporate environments.
-4. **Interactive Features**:
-   - Interactive evidence filtering (`All`, `Known`, `Believed`, `Assumed`, `Unknown`).
+4. **Interactive Evidence & Validation Controls**:
+   - Filterable evidence matrix (`All`, `Known`, `Believed`, `Assumed`, `Unknown`).
    - Interactive human validation checklist with dynamic progress bar and `localStorage` persistence.
    - Dark / Light mode toggle with system preference auto-detection.
    - 1-click "Copy Summary" to clipboard with toast feedback.
@@ -100,7 +107,7 @@ When generating the interactive review, follow this exact structure:
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .container { max-width: 1280px; margin: 0 auto; }
+    .container { max-width: 1320px; margin: 0 auto; }
 
     /* Top Navigation / Toolbar */
     .toolbar {
@@ -133,21 +140,16 @@ When generating the interactive review, follow this exact structure:
     }
     .btn:hover { background: var(--bg-card-subtle); border-color: var(--border-focus); }
 
-    /* ==========================================================
-       2-COLUMN DESKTOP LAYOUT (Left Verdict, Right Analytical Body)
-       ========================================================== */
+    /* 2-COLUMN DESKTOP LAYOUT */
     .main-layout {
       display: grid;
-      grid-template-columns: 390px 1fr;
+      grid-template-columns: 380px 1fr;
       gap: 2rem;
       align-items: start;
     }
 
-    @media (max-width: 980px) {
-      .main-layout {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
+    @media (max-width: 1040px) {
+      .main-layout { grid-template-columns: 1fr; gap: 1.5rem; }
     }
 
     /* LEFT COLUMN: Verdict Sidebar */
@@ -175,7 +177,7 @@ When generating the interactive review, follow this exact structure:
       background: linear-gradient(90deg, #38bdf8, #818cf8, #f59e0b);
     }
 
-    .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.25rem; }
+    .badge-row { display: flex; flex-wrap: gap: 0.5rem; align-items: center; margin-bottom: 1.25rem; }
     .badge {
       display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem;
       border-radius: 9999px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
@@ -205,7 +207,6 @@ When generating the interactive review, follow this exact structure:
     .meta-label { color: var(--text-dim); font-weight: 500; }
     .meta-val { font-weight: 600; color: var(--text-main); }
 
-    /* Alert / Critical Uncertainty (Left Sidebar) */
     .alert-card {
       background: rgba(245, 158, 11, 0.08);
       border: 1px solid rgba(245, 158, 11, 0.3);
@@ -226,23 +227,103 @@ When generating the interactive review, follow this exact structure:
     .section-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.5rem; }
     .section-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; margin-bottom: 1rem; }
 
-    /* DEDICATED REASONING CHAIN FLOW */
-    .chain-container { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.5rem; }
-    .chain-step {
-      display: grid; grid-template-columns: 130px 1fr 140px; align-items: center; gap: 1rem;
-      padding: 0.85rem 1.15rem; background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px;
+    /* CHAIN INSPECTOR STYLES */
+    .chain-toolbar {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border);
+    }
+    .chain-toggles { display: flex; gap: 0.4rem; }
+    .toggle-chip {
+      padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--bg-card-subtle); color: var(--text-muted); cursor: pointer;
       transition: all 0.15s ease;
     }
-    .chain-step:hover { border-color: var(--border-focus); transform: translateX(2px); }
-    .step-role { font-size: 0.75rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
-    .step-desc { font-size: 0.9rem; color: var(--text-main); font-weight: 500; }
-    .step-status {
-      font-size: 0.72rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; text-align: center; text-transform: uppercase;
+    .toggle-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .pipeline-track {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; position: relative; margin-bottom: 1.25rem;
     }
-    .status-supported { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .status-unknown { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .status-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .status-goal { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    @media (max-width: 900px) { .pipeline-track { grid-template-columns: 1fr; } }
+
+    .pipeline-node {
+      background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.85rem 0.75rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column; gap: 0.4rem; position: relative; user-select: none;
+    }
+    .pipeline-node:hover { border-color: var(--border-focus); transform: translateY(-2px); }
+    .pipeline-node.selected {
+      border-color: var(--primary); background: rgba(59, 130, 246, 0.08); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+    .pipeline-node.selected::after {
+      content: ""; position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+      border-width: 8px 8px 0; border-style: solid; border-color: var(--primary) transparent transparent;
+      display: block; width: 0;
+    }
+    @media (max-width: 900px) { .pipeline-node.selected::after { display: none; } }
+
+    .pipeline-node.dimmed { opacity: 0.35; filter: grayscale(0.5); }
+    .pipeline-node.cascade-broken {
+      border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.12) !important;
+      animation: pulseRed 1.8s infinite;
+    }
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    }
+
+    .node-header { display: flex; justify-content: space-between; align-items: center; }
+    .node-num { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .node-role { font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+    .node-state-pill {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 4px;
+    }
+    .state-supported { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .state-unknown { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .state-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    .state-goal { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+
+    .inspector-drawer {
+      background: var(--bg-card-subtle); border: 1px solid var(--border-focus); border-radius: 10px;
+      padding: 1.5rem; margin-top: 0.75rem; position: relative; animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes drawerSlide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .drawer-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+    }
+    .drawer-title-group { display: flex; align-items: center; gap: 0.75rem; }
+    .drawer-step-num {
+      width: 28px; height: 28px; border-radius: 6px; background: var(--primary);
+      color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+    }
+    .drawer-title { font-size: 1.05rem; font-weight: 700; }
+
+    .drawer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
+    @media (max-width: 768px) { .drawer-grid { grid-template-columns: 1fr; } }
+
+    .drawer-item {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .drawer-item-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-dim); }
+    .drawer-item-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.45; }
+
+    .cascade-alert {
+      display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; animation: fadeIn 0.2s ease;
+    }
+    .cascade-alert.active { display: block; }
+    .cascade-alert-title { font-size: 0.85rem; font-weight: 700; color: #ef4444; text-transform: uppercase; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.45rem; }
+    .cascade-alert-desc { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
+
+    .drawer-footer {
+      display: flex; justify-content: space-between; align-items: center; padding-top: 1rem;
+      border-top: 1px solid var(--border); flex-wrap: wrap; gap: 0.75rem;
+    }
+    .btn-stress { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); }
+    .btn-stress:hover { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
+    .btn-stress.active { background: #ef4444; color: white; }
 
     /* Action Hero */
     .action-hero {
@@ -266,57 +347,14 @@ When generating the interactive review, follow this exact structure:
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Evidence Filters */
-    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-    .filter-pill {
-      padding: 0.3rem 0.7rem; font-size: 0.75rem; font-weight: 500; border-radius: 9999px;
-      border: 1px solid var(--border); background: var(--bg-card-subtle); color: var(--text-muted); cursor: pointer;
-    }
-    .filter-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .evidence-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .evidence-item {
-      padding: 0.9rem 1.15rem; background: var(--bg-card-subtle); border: 1px solid var(--border);
-      border-radius: 8px; display: flex; flex-direction: column; gap: 0.35rem;
-    }
-    .evidence-top { display: flex; justify-content: space-between; align-items: center; }
-    .evidence-type-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 4px; }
-    .tag-known { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-    .tag-believed { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-    .tag-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
-    .tag-unknown { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-
-    /* Checklist */
-    .checklist { display: flex; flex-direction: column; gap: 0.65rem; }
-    .check-item {
-      display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.85rem 1rem;
-      background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
-    }
-    .check-item input[type="checkbox"] { margin-top: 0.25rem; width: 17px; height: 17px; accent-color: var(--primary); }
-    .check-label { flex: 1; }
-    .check-role { font-weight: 600; font-size: 0.88rem; color: var(--text-main); }
-    .check-desc { font-size: 0.8rem; color: var(--text-muted); }
-
-    .progress-bar-container { margin-bottom: 1.25rem; }
-    .progress-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem; }
-    .progress-track { height: 6px; background: var(--border); border-radius: 9999px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
-
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem; background: #1e293b; color: #f8fafc;
-      border: 1px solid #475569; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.85rem;
-      opacity: 0; transform: translateY(10px); transition: all 0.2s ease; pointer-events: none; z-index: 100;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
     /* Print Stylesheet */
     @media print {
       body { background: white !important; color: black !important; padding: 0; }
-      .toolbar, .tab-nav, .filter-bar, .actions, .toast { display: none !important; }
+      .toolbar, .tab-nav, .filter-bar, .actions, .toast, .chain-toolbar, .btn-stress { display: none !important; }
       .main-layout { display: block !important; }
       .verdict-sidebar { position: static !important; margin-bottom: 2rem; }
       .tab-pane { display: block !important; margin-bottom: 1.5rem; }
-      .verdict-card, .section-card, .alert-card, .action-hero { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
+      .verdict-card, .section-card, .alert-card, .action-hero, .inspector-drawer { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
     }
   </style>
 </head>
@@ -383,19 +421,85 @@ When generating the interactive review, follow this exact structure:
         </div>
       </aside>
 
-      <!-- RIGHT COLUMN: Dedicated Reasoning Chain & Analytical Deep-Dive -->
+      <!-- RIGHT COLUMN: Dedicated Reasoning Chain Inspector & Analytical Deep-Dive -->
       <section class="content-column">
         
-        <!-- 1. DEDICATED REASONING CHAIN (Prominent, Always Visible) -->
+        <!-- 1. DEDICATED REASONING CHAIN INSPECTOR (Always Visible) -->
         <div class="section-card">
-          <h2 class="section-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            Decision Reasoning Chain
-          </h2>
-          <p class="section-subtitle">Evaluating the 6-link logic chain from problem observation to long-term impact</p>
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Decision Reasoning Chain Inspector
+              </h2>
+              <p class="section-subtitle">Click any node to inspect evidence, assumptions, or stress-test downstream failure cascades</p>
+            </div>
+          </div>
 
-          <div class="chain-container">
-            {{REASONING_CHAIN_NODES}}
+          <!-- Chain Triage Toolbar -->
+          <div class="chain-toolbar">
+            <div class="chain-toggles">
+              <button class="toggle-chip active" id="chip-all" onclick="setChainFilter('all')">All Links (6)</button>
+              <button class="toggle-chip" id="chip-gaps" onclick="setChainFilter('gaps')">⚠️ Highlight Breaks</button>
+            </div>
+            <div class="chain-health-badge">
+              <span>⚠️</span>
+              <span>{{CHAIN_INTEGRITY_SUMMARY}}</span>
+            </div>
+          </div>
+
+          <!-- Pipeline Track -->
+          <div class="pipeline-track" id="pipelineTrack">
+            {{PIPELINE_NODES_HTML}}
+          </div>
+
+          <!-- Dynamic Cascade Alert Banner -->
+          <div class="cascade-alert" id="cascadeAlert">
+            <div class="cascade-alert-title">Downstream Cascade Failure Detected!</div>
+            <div class="cascade-alert-desc" id="cascadeDesc"></div>
+          </div>
+
+          <!-- Inspector Drawer -->
+          <div class="inspector-drawer" id="inspectorDrawer">
+            <div class="drawer-header">
+              <div class="drawer-title-group">
+                <div class="drawer-step-num" id="d-num">1</div>
+                <div>
+                  <div class="drawer-title" id="d-title">Node 1: Problem Observation</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim);" id="d-subtitle">Status: Supported by Telemetry</div>
+                </div>
+              </div>
+              <button class="btn btn-stress" id="btn-stress-toggle" onclick="toggleStressTest()">
+                <span>⚡ Stress-Test: What If This Breaks?</span>
+              </button>
+            </div>
+
+            <div class="drawer-grid">
+              <div class="drawer-item">
+                <span class="drawer-item-label">Stated Claim</span>
+                <div class="drawer-item-text" id="d-claim">...</div>
+              </div>
+              <div class="drawer-item">
+                <span class="drawer-item-label">Supporting Evidence & Source</span>
+                <div class="drawer-item-text" id="d-evidence">...</div>
+              </div>
+              <div class="drawer-item">
+                <span class="drawer-item-label">Inferential Leap / Risk Gap</span>
+                <div class="drawer-item-text" id="d-gap">...</div>
+              </div>
+              <div class="drawer-item">
+                <span class="drawer-item-label">Recommended Verification Action</span>
+                <div class="drawer-item-text" id="d-action">...</div>
+              </div>
+            </div>
+
+            <div class="drawer-footer">
+              <div style="font-size: 0.82rem; color: var(--text-muted);" id="d-hint">Click on unverified steps to stress-test.</div>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn" onclick="navigateNode(-1)">← Previous</button>
+                <button class="btn" onclick="navigateNode(1)">Next →</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -474,6 +578,85 @@ When generating the interactive review, follow this exact structure:
   </script>
 
   <script>
+    // Embedded chain registry populated dynamically by PTR
+    const chainData = {{CHAIN_REGISTRY_JSON}};
+    let currentNode = 1;
+    let isStressTesting = false;
+
+    function inspectNode(num) {
+      currentNode = num;
+      document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('selected'));
+      const el = document.getElementById('node-' + num);
+      if (el) el.classList.add('selected');
+
+      const data = chainData[num];
+      if (!data) return;
+      document.getElementById('d-num').textContent = data.num;
+      document.getElementById('d-title').textContent = data.title;
+      document.getElementById('d-subtitle').textContent = data.subtitle;
+      document.getElementById('d-claim').textContent = data.claim;
+      document.getElementById('d-evidence').textContent = data.evidence;
+      document.getElementById('d-gap').textContent = data.gap;
+      document.getElementById('d-action').textContent = data.action;
+      document.getElementById('d-hint').textContent = data.hint;
+
+      if (isStressTesting) toggleStressTest();
+    }
+
+    function navigateNode(dir) {
+      let next = currentNode + dir;
+      if (next < 1) next = 6;
+      if (next > 6) next = 1;
+      inspectNode(next);
+    }
+
+    function setChainFilter(type) {
+      document.getElementById('chip-all').classList.toggle('active', type === 'all');
+      document.getElementById('chip-gaps').classList.toggle('active', type === 'gaps');
+
+      document.querySelectorAll('.pipeline-node').forEach((n, idx) => {
+        const stepNum = idx + 1;
+        if (type === 'gaps') {
+          if (!chainData[stepNum] || !chainData[stepNum].isBroken) {
+            n.classList.add('dimmed');
+          } else {
+            n.classList.remove('dimmed');
+          }
+        } else {
+          n.classList.remove('dimmed');
+        }
+      });
+    }
+
+    function toggleStressTest() {
+      isStressTesting = !isStressTesting;
+      const btn = document.getElementById('btn-stress-toggle');
+      const alertBox = document.getElementById('cascadeAlert');
+      const desc = document.getElementById('cascadeDesc');
+      const data = chainData[currentNode];
+
+      if (isStressTesting) {
+        btn.classList.add('active');
+        btn.innerHTML = '<span>⚡ Revert Stress-Test Simulation</span>';
+        alertBox.classList.add('active');
+        desc.textContent = data.cascadeMessage || "Downstream failure: subsequent assumptions are invalidated.";
+
+        for (let i = currentNode + 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.add('cascade-broken');
+        }
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<span>⚡ Stress-Test: What If This Breaks?</span>';
+        alertBox.classList.remove('active');
+
+        for (let i = 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.remove('cascade-broken');
+        }
+      }
+    }
+
     function switchTab(evt, tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));

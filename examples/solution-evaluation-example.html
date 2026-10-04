@@ -15,7 +15,7 @@
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --primary: #8b5cf6;
-      --primary-glow: rgba(139, 92, 246, 0.15);
+      --primary-glow: rgba(139, 92, 246, 0.2);
       --stage-solution: #a855f7;
       --stage-solution-bg: rgba(168, 85, 247, 0.12);
       --status-proceed: #10b981;
@@ -50,7 +50,7 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .container { max-width: 1280px; margin: 0 auto; }
+    .container { max-width: 1320px; margin: 0 auto; }
 
     /* Toolbar */
     .toolbar {
@@ -85,21 +85,16 @@
     }
     .btn:hover { background: var(--bg-card-subtle); border-color: var(--border-focus); }
 
-    /* ==========================================================
-       2-COLUMN DESKTOP LAYOUT (Left Verdict, Right Analytical Content)
-       ========================================================== */
+    /* 2-COLUMN DESKTOP LAYOUT */
     .main-layout {
       display: grid;
-      grid-template-columns: 390px 1fr;
+      grid-template-columns: 380px 1fr;
       gap: 2rem;
       align-items: start;
     }
 
-    @media (max-width: 980px) {
-      .main-layout {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
+    @media (max-width: 1040px) {
+      .main-layout { grid-template-columns: 1fr; gap: 1.5rem; }
     }
 
     /* Left Column: Verdict Sidebar */
@@ -167,32 +162,118 @@
     .alert-title { display: flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 0.35rem; }
     .alert-content { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
 
-    /* Right Column: Analytical Body */
+    /* Right Column */
     .content-column { display: flex; flex-direction: column; gap: 1.75rem; }
 
     .section-card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
       padding: 1.75rem; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
     }
-    .section-title {
-      font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .section-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; margin-bottom: 1rem; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+    .section-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.5rem; }
+    .section-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem; }
 
-    /* DEDICATED REASONING CHAIN FLOW */
-    .chain-container { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.5rem; }
-    .chain-step {
-      display: grid; grid-template-columns: 130px 1fr 140px; align-items: center; gap: 1rem;
-      padding: 0.85rem 1.15rem; background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px;
+    /* CHAIN INSPECTOR STYLES */
+    .chain-toolbar {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border);
     }
-    .step-role { font-size: 0.75rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
-    .step-desc { font-size: 0.9rem; color: var(--text-main); font-weight: 500; }
-    .step-status {
-      font-size: 0.72rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; text-align: center; text-transform: uppercase;
+    .chain-toggles { display: flex; gap: 0.4rem; }
+    .toggle-chip {
+      padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--bg-card-subtle); color: var(--text-muted); cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .status-supported { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .status-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .status-goal { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .toggle-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .chain-health-badge {
+      font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    .pipeline-track {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; position: relative; margin-bottom: 1.25rem;
+    }
+    @media (max-width: 900px) { .pipeline-track { grid-template-columns: 1fr; } }
+
+    .pipeline-node {
+      background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.85rem 0.75rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column; gap: 0.4rem; position: relative; user-select: none;
+    }
+    .pipeline-node:hover { border-color: var(--border-focus); transform: translateY(-2px); }
+    .pipeline-node.selected {
+      border-color: var(--primary); background: rgba(139, 92, 246, 0.08); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+    }
+    .pipeline-node.selected::after {
+      content: ""; position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+      border-width: 8px 8px 0; border-style: solid; border-color: var(--primary) transparent transparent;
+      display: block; width: 0;
+    }
+    @media (max-width: 900px) { .pipeline-node.selected::after { display: none; } }
+
+    .pipeline-node.cascade-broken {
+      border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.12) !important;
+      animation: pulseRed 1.8s infinite;
+    }
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    }
+
+    .node-header { display: flex; justify-content: space-between; align-items: center; }
+    .node-num { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .node-role { font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+    .node-state-pill {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 4px;
+    }
+    .state-supported { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .state-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    .state-goal { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+
+    .inspector-drawer {
+      background: var(--bg-card-subtle); border: 1px solid var(--border-focus); border-radius: 10px;
+      padding: 1.5rem; margin-top: 0.75rem; position: relative; animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes drawerSlide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .drawer-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+    }
+    .drawer-title-group { display: flex; align-items: center; gap: 0.75rem; }
+    .drawer-step-num {
+      width: 28px; height: 28px; border-radius: 6px; background: var(--primary);
+      color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+    }
+    .drawer-title { font-size: 1.05rem; font-weight: 700; }
+
+    .drawer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
+    @media (max-width: 768px) { .drawer-grid { grid-template-columns: 1fr; } }
+
+    .drawer-item {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .drawer-item-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-dim); }
+    .drawer-item-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.45; }
+
+    .cascade-alert {
+      display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; animation: fadeIn 0.2s ease;
+    }
+    .cascade-alert.active { display: block; }
+    .cascade-alert-title { font-size: 0.85rem; font-weight: 700; color: #ef4444; text-transform: uppercase; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.45rem; }
+    .cascade-alert-desc { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
+
+    .drawer-footer {
+      display: flex; justify-content: space-between; align-items: center; padding-top: 1rem;
+      border-top: 1px solid var(--border); flex-wrap: wrap; gap: 0.75rem;
+    }
+    .btn-stress { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); }
+    .btn-stress:hover { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
+    .btn-stress.active { background: #ef4444; color: white; }
 
     /* Action Hero */
     .action-hero {
@@ -255,11 +336,11 @@
 
     @media print {
       body { background: white !important; color: black !important; padding: 0; }
-      .toolbar, .tab-nav, .actions, .toast { display: none !important; }
+      .toolbar, .tab-nav, .actions, .toast, .chain-toolbar, .btn-stress { display: none !important; }
       .main-layout { display: block !important; }
       .verdict-sidebar { position: static !important; margin-bottom: 2rem; }
       .tab-pane { display: block !important; margin-bottom: 1.5rem; }
-      .verdict-card, .section-card, .alert-card, .action-hero { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
+      .verdict-card, .section-card, .alert-card, .action-hero, .inspector-drawer { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
     }
   </style>
 </head>
@@ -337,42 +418,144 @@
         </div>
       </aside>
 
-      <!-- RIGHT COLUMN: Analytical Body & Dedicated Reasoning Chain -->
+      <!-- RIGHT COLUMN: Analytical Body & Interactive Pipeline Inspector -->
       <section class="content-column">
         
-        <!-- 1. DEDICATED REASONING CHAIN (Prominent, Always Visible) -->
+        <!-- 1. DEDICATED REASONING CHAIN INSPECTOR -->
         <div class="section-card">
-          <h2 class="section-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            Decision Reasoning Chain (Solution B)
-          </h2>
-          <p class="section-subtitle">Evaluating the 6-link logic chain for the recommended intervention</p>
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Decision Reasoning Chain Inspector (Solution B)
+              </h2>
+              <p class="section-subtitle">Click any node to inspect evidence, assumptions, or stress-test downstream failure cascades</p>
+            </div>
+          </div>
 
-          <div class="chain-container">
-            <div class="chain-step">
-              <span class="step-role">1. Problem</span>
-              <span class="step-desc">40% drop-off after first project creation step</span>
-              <span class="step-status status-supported">Supported (Data)</span>
+          <!-- Chain Toolbar -->
+          <div class="chain-toolbar">
+            <div class="chain-toggles">
+              <button class="toggle-chip active" id="chip-all" onclick="setChainFilter('all')">All Links (6)</button>
+              <button class="toggle-chip" id="chip-gaps" onclick="setChainFilter('gaps')">⚠️ Highlight Assumptions (2)</button>
             </div>
-            <div class="chain-step">
-              <span class="step-role">2. Root Cause</span>
-              <span class="step-desc">Users unsure which form fields are mandatory vs optional</span>
-              <span class="step-status status-supported">Supported (Interviews)</span>
+            <div class="chain-health-badge">
+              <span>✓</span>
+              <span>Chain Integrity: 85% (High Problem-Solution Fit)</span>
             </div>
-            <div class="chain-step">
-              <span class="step-role">3. Intervention</span>
-              <span class="step-desc">Simplify task creation form via progressive disclosure</span>
-              <span class="step-status status-supported">Selected Solution</span>
+          </div>
+
+          <!-- Pipeline Track -->
+          <div class="pipeline-track" id="pipelineTrack">
+            <div class="pipeline-node selected" id="node-1" onclick="inspectNode(1)">
+              <div class="node-header">
+                <span class="node-num">Step 1</span>
+                <span class="node-state-pill state-supported">Data</span>
+              </div>
+              <div class="node-role">Problem</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">40% Drop-off</div>
             </div>
-            <div class="chain-step">
-              <span class="step-role">4. Behaviour</span>
-              <span class="step-desc">Users quickly log 3+ tasks in their first project session</span>
-              <span class="step-status status-assumed">To Validate (Prototype)</span>
+
+            <div class="pipeline-node" id="node-2" onclick="inspectNode(2)">
+              <div class="node-header">
+                <span class="node-num">Step 2</span>
+                <span class="node-state-pill state-supported">User Data</span>
+              </div>
+              <div class="node-role">Root Cause</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Field Ambiguity</div>
             </div>
-            <div class="chain-step">
-              <span class="step-role">5. Impact</span>
-              <span class="step-desc">Improved Day-7 user retention and conversion</span>
-              <span class="step-status status-goal">Target Metric</span>
+
+            <div class="pipeline-node" id="node-3" onclick="inspectNode(3)">
+              <div class="node-header">
+                <span class="node-num">Step 3</span>
+                <span class="node-state-pill state-supported">Selected</span>
+              </div>
+              <div class="node-role">Intervention</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Simplify Form</div>
+            </div>
+
+            <div class="pipeline-node" id="node-4" onclick="inspectNode(4)">
+              <div class="node-header">
+                <span class="node-num">Step 4</span>
+                <span class="node-state-pill state-assumed">To Test</span>
+              </div>
+              <div class="node-role">Behaviour</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Logs 3+ Tasks</div>
+            </div>
+
+            <div class="pipeline-node" id="node-5" onclick="inspectNode(5)">
+              <div class="node-header">
+                <span class="node-num">Step 5</span>
+                <span class="node-state-pill state-assumed">Outcome</span>
+              </div>
+              <div class="node-role">Outcome</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Activation 75%</div>
+            </div>
+
+            <div class="pipeline-node" id="node-6" onclick="inspectNode(6)">
+              <div class="node-header">
+                <span class="node-num">Step 6</span>
+                <span class="node-state-pill state-goal">Goal</span>
+              </div>
+              <div class="node-role">Impact</div>
+              <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.3;">Day-7 Retention</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Cascade Alert Banner -->
+          <div class="cascade-alert" id="cascadeAlert">
+            <div class="cascade-alert-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              Downstream Cascade Failure Detected!
+            </div>
+            <div class="cascade-alert-desc" id="cascadeDesc"></div>
+          </div>
+
+          <!-- Inspector Drawer -->
+          <div class="inspector-drawer" id="inspectorDrawer">
+            <div class="drawer-header">
+              <div class="drawer-title-group">
+                <div class="drawer-step-num" id="d-num">1</div>
+                <div>
+                  <div class="drawer-title" id="d-title">Node 1: Problem Observation</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim);" id="d-subtitle">Status: Supported by Funnel Telemetry</div>
+                </div>
+              </div>
+              <button class="btn btn-stress" id="btn-stress-toggle" onclick="toggleStressTest()">
+                <span>⚡ Stress-Test: What If This Breaks?</span>
+              </button>
+            </div>
+
+            <div class="drawer-grid">
+              <div class="drawer-item">
+                <span class="drawer-item-label">Stated Claim</span>
+                <div class="drawer-item-text" id="d-claim">New users create fewer tasks than expected after signup.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Supporting Evidence & Source</span>
+                <div class="drawer-item-text" id="d-evidence">Analytics show a 40% drop-off immediately after the first project creation screen.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Inferential Leap / Risk Gap</span>
+                <div class="drawer-item-text" id="d-gap">Low inference gap. Direct analytics prove the drop-off is localized to task setup.</div>
+              </div>
+
+              <div class="drawer-item">
+                <span class="drawer-item-label">Recommended Verification Action</span>
+                <div class="drawer-item-text" id="d-action">Validate prototype of simplified workflow with 6 users before committing full build.</div>
+              </div>
+            </div>
+
+            <div class="drawer-footer">
+              <div style="font-size: 0.82rem; color: var(--text-muted);" id="d-hint">
+                👉 Click on Step 4 (Behaviour) to stress-test prototype adoption.
+              </div>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn" onclick="navigateNode(-1)">← Previous</button>
+                <button class="btn" onclick="navigateNode(1)">Next →</button>
+              </div>
             </div>
           </div>
         </div>
@@ -512,6 +695,162 @@
   </script>
 
   <script>
+    const chainData = {
+      1: {
+        num: 1,
+        title: "Node 1: Problem Observation",
+        subtitle: "Status: Supported by Analytics",
+        claim: "New users create fewer tasks than expected after signup.",
+        evidence: "Analytics show a 40% drop-off after the first project creation step.",
+        gap: "Directly measured. Confirmed user bottleneck.",
+        action: "Focus intervention on initial task creation workflow.",
+        hint: "👉 Click on Step 3 or 4 to inspect solution mechanics.",
+        isBroken: false,
+        cascadeMessage: "If the Problem didn't exist, no workflow redesign would be necessary."
+      },
+      2: {
+        num: 2,
+        title: "Node 2: Root Cause Diagnosis",
+        subtitle: "Status: Supported by User Interviews",
+        claim: "Users are unsure what information to add and feel overwhelmed by empty form fields.",
+        evidence: "Customer interviews and support tickets repeatedly cite confusion during task creation.",
+        gap: "Strong alignment between qualitative research and drop-off analytics.",
+        action: "Eliminate optional fields using progressive disclosure.",
+        hint: "👉 Step 2 is well supported by user interviews.",
+        isBroken: false,
+        cascadeMessage: "If users were not confused by fields, simplifying them would not move the needle."
+      },
+      3: {
+        num: 3,
+        title: "Node 3: Selected Intervention (Solution B)",
+        subtitle: "Status: Strong Problem-Solution Fit",
+        claim: "Simplify task creation workflow to title-only with inline progressive disclosure.",
+        evidence: "Directly addresses field ambiguity identified in Step 2. Lowest effort (3 wks).",
+        gap: "Requires design validation to ensure power users can still add detailed metadata.",
+        action: "Build prototype removing 4 optional fields and test with 6 users.",
+        hint: "⚡ Click 'Stress-Test' to see what happens if the simplified UI breaks power-user workflows.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: If simplification strips fields that power users require, creation rates may rise for casual users but drop for enterprise accounts."
+      },
+      4: {
+        num: 4,
+        title: "Node 4: Expected Behaviour Change",
+        subtitle: "Status: To Validate via Prototype",
+        claim: "Users will quickly log 3+ tasks in their first project session without hesitation.",
+        evidence: "Assumed based on reducing cognitive overhead.",
+        gap: "Unverified assumption. Need to measure time-to-first-task in prototype testing.",
+        action: "Conduct moderated usability test with 6 target users.",
+        hint: "⚡ Click 'Stress-Test' to simulate behaviour failure.",
+        isBroken: true,
+        cascadeMessage: "CASCADE IMPACT: If users still hesitate to log tasks even with a simplified form, the real blocker may be project template structure rather than form layout."
+      },
+      5: {
+        num: 5,
+        title: "Node 5: Desired Product Outcome",
+        subtitle: "Status: Projected Lift",
+        claim: "Project activation rate increases from 60% to 75%.",
+        evidence: "Mathematical model based on eliminating the 40% step friction.",
+        gap: "Contingent on Step 4 behaviour adoption.",
+        action: "Set up cohort tracking for the prototype pilot rollout.",
+        hint: "Check upstream nodes.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: Lift fails to materialize if Step 4 behaviour change is not achieved."
+      },
+      6: {
+        num: 6,
+        title: "Node 6: Business Impact",
+        subtitle: "Status: Strategic ARR Driver",
+        claim: "Higher Day-7 user retention and trial-to-paid conversion.",
+        evidence: "Established SaaS metric: accounts with 3+ tasks have 2.8x higher trial conversion.",
+        gap: "High strategic importance. 3-week effort gives excellent ROI.",
+        action: "Obtain engineering and design sign-offs.",
+        hint: "Click 'All Links' to view whole chain.",
+        isBroken: false,
+        cascadeMessage: "CASCADE IMPACT: Lost revenue opportunity if activation fails."
+      }
+    };
+
+    let currentNode = 1;
+    let isStressTesting = false;
+
+    function inspectNode(num) {
+      currentNode = num;
+      document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('selected'));
+      document.getElementById('node-' + num).classList.add('selected');
+
+      const data = chainData[num];
+      document.getElementById('d-num').textContent = data.num;
+      document.getElementById('d-title').textContent = data.title;
+      document.getElementById('d-subtitle').textContent = data.subtitle;
+      document.getElementById('d-claim').textContent = data.claim;
+      document.getElementById('d-evidence').textContent = data.evidence;
+      document.getElementById('d-gap').textContent = data.gap;
+      document.getElementById('d-action').textContent = data.action;
+      document.getElementById('d-hint').textContent = data.hint;
+
+      if (isStressTesting) {
+        toggleStressTest();
+      }
+    }
+
+    function navigateNode(dir) {
+      let next = currentNode + dir;
+      if (next < 1) next = 6;
+      if (next > 6) next = 1;
+      inspectNode(next);
+    }
+
+    function setChainFilter(type) {
+      document.getElementById('chip-all').classList.toggle('active', type === 'all');
+      document.getElementById('chip-gaps').classList.toggle('active', type === 'gaps');
+
+      document.querySelectorAll('.pipeline-node').forEach((n, idx) => {
+        const stepNum = idx + 1;
+        if (type === 'gaps') {
+          if (!chainData[stepNum].isBroken) {
+            n.classList.add('dimmed');
+          } else {
+            n.classList.remove('dimmed');
+          }
+        } else {
+          n.classList.remove('dimmed');
+        }
+      });
+
+      if (type === 'gaps') {
+        inspectNode(4); // Jump to behaviour assumption
+      }
+    }
+
+    function toggleStressTest() {
+      isStressTesting = !isStressTesting;
+      const btn = document.getElementById('btn-stress-toggle');
+      const alertBox = document.getElementById('cascadeAlert');
+      const desc = document.getElementById('cascadeDesc');
+      const data = chainData[currentNode];
+
+      if (isStressTesting) {
+        btn.classList.add('active');
+        btn.innerHTML = '<span>⚡ Revert Stress-Test Simulation</span>';
+        alertBox.classList.add('active');
+        desc.textContent = data.cascadeMessage;
+
+        for (let i = currentNode + 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.add('cascade-broken');
+        }
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<span>⚡ Stress-Test: What If This Breaks?</span>';
+        alertBox.classList.remove('active');
+
+        for (let i = 1; i <= 6; i++) {
+          const el = document.getElementById('node-' + i);
+          if (el) el.classList.remove('cascade-broken');
+        }
+      }
+    }
+
     function switchTab(evt, tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));

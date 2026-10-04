@@ -221,10 +221,14 @@ The generated HTML file must be visually intuitive, modern, responsive, and comp
    - The **Reasoning Chain** is the analytical spine of the review. It must have its own dedicated, permanent space at the top of the right column—**never tucked away inside a tab**.
    - Renders each of the 6 interconnected logic links (`Problem → Root Cause → Intervention → Expected Behaviour → Outcome → Business Impact`) as visual cards with status tags (`Supported`, `Partially Supported`, `Assumed`, `Unknown`, `Contradicted`).
 3. **Zero External Dependencies**: Must NOT require external CDN stylesheets, Google Fonts, or external JavaScript libraries. All CSS and JavaScript must be embedded inline (`<style>` and `<script>`). Must open seamlessly offline or in air-gapped environments.
-4. **Modern System Aesthetics**:
-   - Modern system font stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`).
-   - Dark mode default (`body data-theme="dark"`) with a functional Light Mode toggle that adapts all backgrounds, cards, text colors, and borders via CSS variables.
-   - Clean card-based visual hierarchy, rounded borders (8–12px), subtle shadows, and status pills.
+4. **Studio UI Aesthetics (Anti-AI-Slop Standards)**:
+   - **Font weight one level thinner**: Bold becomes Semibold (`font-weight: 600`), Semibold becomes Medium (`font-weight: 500`), body is Normal (`400`). Avoids heavy, clumsy AI-template typography.
+   - **Tight Tracking on Titles**: All titles and primary headings above 20px must use `letter-spacing: -0.025em;` (`tracking-tight`).
+   - **Subtle Contrast & Fine Outlines**: Onyx dark background (`#08090d`), card surface (`#0f121a`), hairline borders (`rgba(255, 255, 255, 0.08)` on dark, `rgba(0, 0, 0, 0.08)` on light), and subtle top-edge card highlights (`box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04)`).
+   - **Crisp 1.5 Stroke Width Icons**: All icons must use inline vector SVG with `stroke-width="1.5"` and `stroke-linecap="round"` `stroke-linejoin="round"`. Avoid gradient containers for icons.
+   - **Brand Monogram**: Logos use letters only with tight tracking (e.g. monospace badge `PTR` with `letter-spacing: -0.05em;`).
+   - **Custom Controls**: Checkboxes in validation gates must be custom-styled components with smooth SVG checkmark indicators—never default native browser checkboxes.
+   - **No Floating Clutter**: Avoid bottom-right floating action/download buttons; keep actions consolidated in the top navigation toolbar.
    - Stage-specific accent colors:
      - `PROBLEM_VALIDATION`: Blue (`#38bdf8`)
      - `SOLUTION_EVALUATION`: Purple (`#a855f7`)
@@ -237,11 +241,11 @@ The generated HTML file must be visually intuitive, modern, responsive, and comp
 The interactive HTML report must contain the following core visual sections arranged in the desktop left-right architecture:
 
 #### A. Header Toolbar & Quick Actions (Full Width)
-- **Brand Title**: "Product Decision Reviewer" with a visual badge (`PTR`).
+- **Brand Title**: "Product Decision Reviewer" with a monospace monogram badge (`PTR`).
 - **Quick Action Buttons**:
-  - `Copy Summary`: Copies a formatted executive summary to the clipboard and shows an animated toast notification.
+  - `Copy Summary`: Copies a formatted executive summary to the clipboard with toast feedback.
   - `Print / PDF`: Triggers `window.print()` for 1-click PDF export.
-  - `Theme Toggle`: Switches between Dark and Light mode.
+  - `Theme Toggle`: Switches between Dark and Light mode, updating the Lucide sun/moon SVG icon.
 
 #### B. Left Column: Main Verdict Block (Sticky on Desktop)
 1. **Verdict & Decision Card**:

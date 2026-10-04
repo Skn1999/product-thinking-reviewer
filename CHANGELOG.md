@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.1
+
+- Studio UI Design Standards (Anti-AI-Slop): Refined typography with 1-level thinner font weights (`font-weight: 600` for titles, `500` for subtitles/badges), `letter-spacing: -0.025em` (`tracking-tight`) on headings.
+- Bespoke Onyx Dark Mode: Elevated dark palette (`#08090d`), hairline card borders (`rgba(255,255,255,0.08)`), subtle card highlights, and soft contrast.
+- Custom Input Controls: Custom engineered checkboxes with smooth SVG checkmark transitions and `localStorage` persistence (no default browser checkboxes).
+- Vector Lucide Icons: Upgraded all icons to 1.5 stroke width inline Lucide SVGs; replaced gradient icon box with a clean monospace monogram badge (`PTR`) with tight tracking.
+
 ## v1.1.0
  
 - Interactive HTML Decision Report output: generates a self-contained, responsive dashboard (`product-decision-review.html`) instead of static markdown.

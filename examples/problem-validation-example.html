@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Decision Review: AI Onboarding Assistant</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-subtle: #182234;
+      --border: #334155;
+      --border-focus: #64748b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.15);
+      --stage-problem: #38bdf8;
+      --stage-problem-bg: rgba(56, 189, 248, 0.12);
+      --stage-solution: #a855f7;
+      --stage-readiness: #f59e0b;
+      --stage-rollout: #10b981;
+      --status-proceed: #10b981;
+      --status-validate: #f59e0b;
+      --status-stop: #ef4444;
+      --confidence-high: #10b981;
+      --confidence-med: #f59e0b;
+      --confidence-low: #ef4444;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-focus: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      --primary-glow: rgba(59, 130, 246, 0.08);
+      --stage-problem-bg: rgba(56, 189, 248, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 1.5rem 1rem 3rem 1rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation / Toolbar */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--bg-card-subtle);
+      border-color: var(--border-focus);
+    }
+
+    /* ==========================================================
+       2-COLUMN DESKTOP LAYOUT (Left Verdict, Right Analytical Content)
+       ========================================================== */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    /* LEFT COLUMN: Main Verdict Block (Sticky on Desktop) */
+    .verdict-sidebar {
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .verdict-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verdict-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #f59e0b);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-stage {
+      background: var(--stage-problem-bg);
+      color: var(--stage-problem);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .verdict-banner {
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .verdict-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+    }
+
+    .verdict-status {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--status-validate);
+      letter-spacing: -0.01em;
+    }
+
+    .decision-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.02em;
+    }
+
+    .decision-summary {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
+    }
+
+    .meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+
+    .meta-label {
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .meta-val {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Left Critical Uncertainty Card */
+    .alert-card {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-left: 4px solid var(--status-validate);
+      border-radius: 8px;
+      padding: 1.2rem;
+    }
+
+    .alert-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--status-validate);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .alert-content {
+      font-size: 0.88rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* RIGHT COLUMN: Analytical Content */
+    .content-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    /* Section Card */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ==========================================================
+       DEDICATED REASONING CHAIN FLOW (Prominent, Always Visible)
+       ========================================================== */
+    .chain-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 0.5rem;
+    }
+
+    .chain-step {
+      display: grid;
+      grid-template-columns: 130px 1fr 140px;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.15rem;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .chain-step:hover {
+      border-color: var(--border-focus);
+      transform: translateX(2px);
+    }
+
+    .step-role {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .step-status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .status-supported {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-unknown {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-assumed {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .status-goal {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Action Hero Card */
+    .action-hero {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(139, 92, 246, 0.08));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .action-hero-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+
+    .action-hero-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+      color: var(--text-main);
+    }
+
+    .action-hero-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Tabs for Deep-Dive Sections */
+    .tab-nav {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 0.55rem 0.95rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Evidence Filters */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-pill {
+      padding: 0.3rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-pill:hover, .filter-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .evidence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .evidence-item {
+      padding: 0.9rem 1.15rem;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .evidence-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .evidence-type-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    .tag-known { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .tag-believed { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .tag-assumed { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    .tag-unknown { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+    .evidence-text {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .evidence-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Checklist */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+
+    .check-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .check-item input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .check-label { flex: 1; }
+    .check-role { font-weight: 600; font-size: 0.88rem; color: var(--text-main); }
+    .check-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+    .progress-bar-container { margin-bottom: 1.25rem; }
+    .progress-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .progress-track { height: 6px; background: var(--border); border-radius: 9999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Print Styles */
+    @media print {
+      body { background: white !important; color: black !important; padding: 0; }
+      .toolbar, .tab-nav, .filter-bar, .actions, .toast { display: none !important; }
+      .main-layout { display: block !important; }
+      .verdict-sidebar { position: static !important; margin-bottom: 2rem; }
+      .tab-pane { display: block !important; margin-bottom: 1.5rem; }
+      .verdict-card, .section-card, .alert-card, .action-hero { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; }
+      .badge, .step-status, .evidence-type-tag { border: 1px solid #999 !important; color: black !important; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="container">
+    <!-- Header / Toolbar -->
+    <header class="toolbar">
+      <div class="brand">
+        <div class="brand-icon">PTR</div>
+        <div>
+          <div class="brand-title">Product Decision Reviewer</div>
+          <div class="brand-subtitle">Evidence-aware decision evaluation</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="copyBtn" onclick="copyExecutiveSummary()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy Summary
+        </button>
+        <button class="btn" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Print / PDF
+        </button>
+        <button class="btn" id="themeToggle" onclick="toggleTheme()">
+          <span id="themeIcon">☀️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2-COLUMN MAIN LAYOUT -->
+    <main class="main-layout">
+      
+      <!-- ==============================================
+           LEFT COLUMN: Main Verdict Block & Uncertainty
+           ============================================== -->
+      <aside class="verdict-sidebar">
+        <!-- Main Verdict Card -->
+        <div class="verdict-card">
+          <div class="badge-row">
+            <span class="badge badge-stage">Problem Validation</span>
+            <span class="badge" style="background: rgba(245, 158, 11, 0.12); color: var(--confidence-med);">Conf: Medium</span>
+            <span class="badge" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">Risk: Med-High</span>
+          </div>
+
+          <!-- Prominent Recommendation Verdict Banner -->
+          <div class="verdict-banner">
+            <span class="verdict-tag">Verdict</span>
+            <span class="verdict-status">Validate First</span>
+          </div>
+
+          <h1 class="decision-title">Should we build an AI onboarding assistant?</h1>
+          <p class="decision-summary">
+            The proposal frames a solution as the problem. While onboarding activation dropped by 12%, current evidence does not prove that an AI assistant addresses the underlying setup friction. Validate drop-offs before building.
+          </p>
+
+          <div class="meta-list">
+            <div class="meta-item">
+              <span class="meta-label">Decision Owner</span>
+              <span class="meta-val">Product Team</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Commitment</span>
+              <span class="meta-val">AI Assistant Build (4–6 wks)</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Target Audience</span>
+              <span class="meta-val">New SaaS signups</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Reversibility</span>
+              <span class="meta-val">Low (Code investment)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Critical Uncertainty Box (Anchored in Left Column) -->
+        <div class="alert-card">
+          <div class="alert-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Critical Uncertainty
+          </div>
+          <div class="alert-content">
+            <strong>What specific friction causes users to abandon onboarding?</strong> Current telemetry does not distinguish between confusing form fields, missing configuration data, or lack of inline guidance.
+          </div>
+        </div>
+      </aside>
+
+      <!-- ==============================================
+           RIGHT COLUMN: Analytical Body & Dedicated Chain
+           ============================================== -->
+      <section class="content-column">
+        
+        <!-- 1. DEDICATED REASONING CHAIN (Prominent, Moved Out of Tabs) -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Decision Reasoning Chain
+              </h2>
+              <p class="section-subtitle">Evaluating the 6-link logic chain from problem observation to long-term impact</p>
+            </div>
+          </div>
+
+          <div class="chain-container">
+            <div class="chain-step">
+              <span class="step-role">1. Problem</span>
+              <span class="step-desc">New users fail to complete onboarding setup</span>
+              <span class="step-status status-supported">Supported (Data)</span>
+            </div>
+
+            <div class="chain-step">
+              <span class="step-role">2. Root Cause</span>
+              <span class="step-desc">Unclear configuration vs. UI cognitive overload</span>
+              <span class="step-status status-unknown">Unknown</span>
+            </div>
+
+            <div class="chain-step">
+              <span class="step-role">3. Intervention</span>
+              <span class="step-desc">Build interactive AI onboarding assistant</span>
+              <span class="step-status status-assumed">Proposed Solution</span>
+            </div>
+
+            <div class="chain-step">
+              <span class="step-role">4. Behaviour</span>
+              <span class="step-desc">Users consult AI and resolve setup blockers faster</span>
+              <span class="step-status status-assumed">Assumed</span>
+            </div>
+
+            <div class="chain-step">
+              <span class="step-role">5. Outcome</span>
+              <span class="step-desc">Onboarding completion rate returns to baseline</span>
+              <span class="step-status status-assumed">Unverified</span>
+            </div>
+
+            <div class="chain-step">
+              <span class="step-role">6. Impact</span>
+              <span class="step-desc">Activation improves by +12%, reducing early churn</span>
+              <span class="step-status status-goal">Strategic Goal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. RECOMMENDED NEXT ACTION & RATIONALE -->
+        <div class="section-card">
+          <div class="action-hero">
+            <div class="action-hero-label">Recommended Next Action</div>
+            <h3 class="action-hero-title">Conduct Drop-off Funnel Telemetry & 5 Targeted User Interviews</h3>
+            <p class="action-hero-desc">
+              Instrument step-by-step onboarding events to isolate the exact abandonment screen. Interview 5 recently churned users to test whether difficulty is due to configuration complexity or missing setup context.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div>
+              <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Recommendation Rationale</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+                Building an AI chatbot before isolating the failure mode carries high engineering opportunity cost. If the real barrier is an ambiguous field, an AI chatbot will add friction rather than fix activation.
+              </p>
+            </div>
+            <div>
+              <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">What Could Change This Advice?</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+                If telemetry reveals that drop-offs occur specifically because users struggle to articulate setup parameters, and lightweight inline tooltips fail in rapid tests, an AI assistant would be justified.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. DEEP-DIVE TABS (Evidence Matrix, Stage Deep-Dive, Human Validation) -->
+        <div class="section-card">
+          <nav class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-evidence')">Evidence Map (5)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-deepdive')">Stage Deep-Dive</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-validation')">Human Validation Gates</button>
+          </nav>
+
+          <!-- Tab: Evidence Map -->
+          <div id="tab-evidence" class="tab-pane active">
+            <div class="filter-bar">
+              <button class="filter-pill active" onclick="filterEvidence('all')">All (5)</button>
+              <button class="filter-pill" onclick="filterEvidence('known')">Known (2)</button>
+              <button class="filter-pill" onclick="filterEvidence('believed')">Believed (1)</button>
+              <button class="filter-pill" onclick="filterEvidence('assumed')">Assumed (1)</button>
+              <button class="filter-pill" onclick="filterEvidence('unknown')">Unknown (1)</button>
+            </div>
+
+            <div class="evidence-list" id="evidenceContainer">
+              <div class="evidence-item" data-category="known">
+                <div class="evidence-top">
+                  <span class="evidence-type-tag tag-known">Known (Direct Metric)</span>
+                  <span class="evidence-meta">Source: Product Analytics (Q4)</span>
+                </div>
+                <div class="evidence-text">Activation rate decreased by 12% across new accounts in the last quarter.</div>
+                <div class="evidence-meta">High reliability. Clearly establishes that an onboarding problem exists.</div>
+              </div>
+
+              <div class="evidence-item" data-category="known">
+                <div class="evidence-top">
+                  <span class="evidence-type-tag tag-known">Known (Customer Quotes)</span>
+                  <span class="evidence-meta">Source: Zendesk & CS Tickets</span>
+                </div>
+                <div class="evidence-text">15 inbound customer requests explicitly asked for "AI assistance" during onboarding.</div>
+                <div class="evidence-meta">Direct observation, but asks for a feature rather than diagnosing the underlying friction.</div>
+              </div>
+
+              <div class="evidence-item" data-category="believed">
+                <div class="evidence-top">
+                  <span class="evidence-type-tag tag-believed">Believed (Qualitative)</span>
+                  <span class="evidence-meta">Source: Customer Success Team</span>
+                </div>
+                <div class="evidence-text">CS team believes configuration screen is too complex for non-technical users.</div>
+                <div class="evidence-meta">Consistent with support patterns, but lacks screen-level funnel telemetry.</div>
+              </div>
+
+              <div class="evidence-item" data-category="assumed">
+                <div class="evidence-top">
+                  <span class="evidence-type-tag tag-assumed">Assumed</span>
+                  <span class="evidence-meta">Source: Product Spec</span>
+                </div>
+                <div class="evidence-text">Users will interact with a chat assistant rather than abandon when they hit setup friction.</div>
+                <div class="evidence-meta">Critical unverified assumption. Chatbots can add cognitive burden if users want instant clarity.</div>
+              </div>
+
+              <div class="evidence-item" data-category="unknown">
+                <div class="evidence-top">
+                  <span class="evidence-type-tag tag-unknown">Unknown</span>
+                  <span class="evidence-meta">Missing Data</span>
+                </div>
+                <div class="evidence-text">The exact onboarding step with the highest abandonment percentage is not instrumented.</div>
+                <div class="evidence-meta">Decision blocker. Cannot select intervention without step-level drop-off data.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Stage Deep-Dive -->
+          <div id="tab-deepdive" class="tab-pane">
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem;">Problem vs. Solution Disguise Check</h4>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1.25rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+                  <th style="padding: 0.6rem 0.5rem; color: var(--text-dim);">Dimension</th>
+                  <th style="padding: 0.6rem 0.5rem; color: var(--text-dim);">Submitted Pitch</th>
+                  <th style="padding: 0.6rem 0.5rem; color: var(--text-dim);">Reframed Problem</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 0.6rem 0.5rem; font-weight: 600;">Stated Claim</td>
+                  <td style="padding: 0.6rem 0.5rem; color: var(--status-stop);">"Users need an AI assistant"</td>
+                  <td style="padding: 0.6rem 0.5rem; color: var(--status-proceed);">"New users struggle with onboarding, activation down 12%"</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 0.6rem 0.5rem; font-weight: 600;">Nature</td>
+                  <td style="padding: 0.6rem 0.5rem;">Prescriptive Solution</td>
+                  <td style="padding: 0.6rem 0.5rem;">Observable User & Business Problem</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.6rem 0.5rem; font-weight: 600;">Downside Risk</td>
+                  <td style="padding: 0.6rem 0.5rem;">High risk of building wrong thing</td>
+                  <td style="padding: 0.6rem 0.5rem;">Allows testing cheaper form simplifications first</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem;">Missing Evidence Required</h4>
+            <ul style="padding-left: 1.25rem; font-size: 0.86rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.35rem;">
+              <li>Step-by-step funnel drop-off telemetry across onboarding screens.</li>
+              <li>User session replays highlighting friction points prior to drop-off.</li>
+              <li>A/B test of simpler form defaults before deploying AI agents.</li>
+            </ul>
+          </div>
+
+          <!-- Tab: Human Validation -->
+          <div id="tab-validation" class="tab-pane">
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 1rem;">
+              This review is advisory. Preserving human agency requires named owners to review and validate critical findings before committing engineering sprints.
+            </p>
+
+            <div class="progress-bar-container">
+              <div class="progress-header">
+                <span>Review Gates Progress</span>
+                <span id="progressText">0 of 4 Completed</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+            </div>
+
+            <div class="checklist">
+              <label class="check-item">
+                <input type="checkbox" onchange="updateProgress()" data-gate="pm">
+                <div class="check-label">
+                  <div class="check-role">Product Manager (Decision Owner)</div>
+                  <div class="check-desc">Agree to delay AI solution build until funnel instrumentation and user drop-off research conclude.</div>
+                </div>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" onchange="updateProgress()" data-gate="analytics">
+                <div class="check-label">
+                  <div class="check-role">Analytics / Growth Lead</div>
+                  <div class="check-desc">Confirm delivery of step-by-step onboarding funnel telemetry within 3 business days.</div>
+                </div>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" onchange="updateProgress()" data-gate="cs">
+                <div class="check-label">
+                  <div class="check-role">Customer Success Lead</div>
+                  <div class="check-desc">Provide 5 customer contacts who recently reported difficulty during onboarding for targeted interviews.</div>
+                </div>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" onchange="updateProgress()" data-gate="eng">
+                <div class="check-label">
+                  <div class="check-role">Engineering Lead</div>
+                  <div class="check-desc">Estimate cost of event tracking vs cost of AI assistant architecture (feasibility benchmark).</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast">Executive summary copied to clipboard!</div>
+
+  <!-- Machine-readable metadata payload -->
+  <script type="application/json" id="pdr-data">
+  {
+    "decisionTitle": "Should we build an AI onboarding assistant to fix setup drop-offs?",
+    "decisionStage": "PROBLEM_VALIDATION",
+    "recommendation": "VALIDATE_FIRST",
+    "confidence": "MEDIUM",
+    "decisionRisk": "MEDIUM_HIGH",
+    "criticalUncertainty": "What specific friction causes users to abandon onboarding?",
+    "nextAction": "Instrument funnel events and interview 5 churned users to isolate root causes.",
+    "humanValidationRequired": [
+      { "role": "Product Manager", "action": "Confirm research-first approach" },
+      { "role": "Analytics Lead", "action": "Deliver step funnel telemetry" },
+      { "role": "Customer Success Lead", "action": "Supply churned customer interview candidates" },
+      { "role": "Engineering Lead", "action": "Verify instrumentation feasibility" }
+    ]
+  }
+  </script>
+
+  <script>
+    // Tab switching
+    function switchTab(evt, tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      evt.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Evidence filtering
+    function filterEvidence(category) {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      const items = document.querySelectorAll('.evidence-item');
+      items.forEach(item => {
+        item.style.display = (category === 'all' || item.dataset.category === category) ? 'flex' : 'none';
+      });
+    }
+
+    // Progress bar for human validation gates
+    function updateProgress() {
+      const total = document.querySelectorAll('.check-item input[type="checkbox"]').length;
+      const checked = document.querySelectorAll('.check-item input[type="checkbox"]:checked').length;
+      const pct = Math.round((checked / total) * 100);
+      
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressText').textContent = `${checked} of ${total} Completed (${pct}%)`;
+
+      // Save to localStorage
+      const state = {};
+      document.querySelectorAll('.check-item input[type="checkbox"]').forEach((cb, idx) => {
+        state[idx] = cb.checked;
+      });
+      localStorage.setItem('pdr_validation_state', JSON.stringify(state));
+    }
+
+    // Restore saved progress
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('pdr_validation_state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          document.querySelectorAll('.check-item input[type="checkbox"]').forEach((cb, idx) => {
+            if (state[idx]) cb.checked = true;
+          });
+          updateProgress();
+        } catch (e) {}
+      }
+    });
+
+    // Theme toggle
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // Copy executive summary
+    function copyExecutiveSummary() {
+      const summary = `Product Decision Review: AI Onboarding Assistant
+Decision Stage: PROBLEM_VALIDATION
+Verdict: VALIDATE FIRST
+Confidence: MEDIUM | Risk: MEDIUM-HIGH
+Critical Uncertainty: What specific friction causes users to abandon onboarding?
+Recommended Next Action: Instrument funnel events and interview 5 churned users to isolate root causes.`;
+      
+      navigator.clipboard.writeText(summary).then(() => {
+        showToast('Executive summary copied to clipboard!');
+      }).catch(() => {
+        showToast('Unable to copy to clipboard');
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

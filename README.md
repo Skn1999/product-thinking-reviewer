@@ -26,10 +26,17 @@ The skill helps with:
 ✓ Solution evaluation
 ✓ Decision readiness
 ✓ Rollout strategy
+✓ Interactive HTML Decision Reports (self-contained, offline-ready stakeholder dashboards)
 
-## Design Philosophy
+## Output Format
 
-This skill acts as an advisor, not an autonomous decision-maker. It improves decision quality while preserving human judgement.
+Instead of dense markdown documents, the skill outputs a standalone, self-contained interactive HTML file (`product-decision-review.html`):
+
+- **Desktop 2-Column (Left-Right) Layout**: Left sticky sidebar for the Main Verdict, Risk, Confidence, and Critical Uncertainty; right column for analytical body.
+- **Dedicated Reasoning Chain**: Permanently visible (moved out of tabs), mapping the 6-link logic chain (`Problem → Root Cause → Intervention → Behaviour → Outcome → Impact`) with evidence status indicators.
+- **Filterable Evidence Matrix**: Categorized into *Known*, *Believed*, *Assumed*, and *Unknown*.
+- **Interactive Human Validation Gates**: Checkbox review tracker with live progress calculation and `localStorage` persistence for stakeholder alignment.
+- **Offline & Export Ready**: Zero CDN dependencies, Dark/Light mode toggle, 1-click summary copy, and clean print/PDF stylesheet.
 
 ## Architecture
 
@@ -39,7 +46,7 @@ Decision routing
 ↓
 Reference modules
 ↓
-Decision assessment
+Interactive HTML Decision Report (`product-decision-review.html`)
 
 ## Limitations
 

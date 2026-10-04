@@ -1,6 +1,6 @@
 ---
 name: product-thinking-reviewer
-description: Reviews product decisions and thinking by clarifying the decision stage, separating claims from evidence and assumptions, evaluating problem validity and solution propositions, assessing decision readiness and rollout risk, and recommending the next action. Use when a product team needs to decide whether to investigate, validate, prototype, build, launch, roll back, or defer a product direction.
+description: Reviews product decisions and thinking by clarifying the decision stage, separating claims from evidence and assumptions, evaluating problem validity and solution propositions, assessing decision readiness and rollout risk, and recommending the next action. Generates a self-contained, interactive HTML decision report for stakeholders. Use when a product team needs to decide whether to investigate, validate, prototype, build, launch, roll back, or defer a product direction.
 ---
 
 # Product Thinking Reviewer
@@ -189,83 +189,109 @@ Load only the references relevant to the primary stage, if they exist in the rep
 - `references/solution-evaluation.md` for candidate solutions, problem-solution fit, business alignment, constraints, impact, effort, risk, and trade-offs.
 - `references/decision-readiness.md` for decision-chain validation, confidence thresholds, critical uncertainty, and commitment readiness.
 - `references/rollout-risk.md` for exposure, reversibility, staged rollout, success signals, warning signals, and rollback conditions.
+- `references/interactive-html-output.md` for HTML markup template, CSS design system, and interaction scripts.
 
 If a referenced file is absent, do not pretend it was consulted. Apply the workflow in this file and state any material limitation.
 
-## Hybrid Output Contract
+## Interactive HTML Output Contract
 
-Every review must contain the following core sections, in this order:
+Instead of generating a static Markdown file (`.md`), every product decision review must be output as a **standalone, self-contained, interactive HTML file** (default filename: `product-decision-review.html` or `<decision-slug>-review.html`) written directly to the workspace, paired with a concise chat summary.
 
-1. **Decision Summary** — The decision and the current recommendation in a few sentences.
-2. **Current Decision Stage** — One primary stage and why it is the current bottleneck.
-3. **Context Summary** — Relevant users, outcomes, constraints, timing, and options.
-4. **Key Assumptions** — Assumptions that materially support the reasoning.
-5. **Evidence Confidence** — High, medium, or low, with a concise justification.
-6. **Critical Uncertainty** — The most decision-relevant unknown.
-7. **Recommendation** — Proceed, validate first, narrow scope, stage, defer, stop, or another precise action.
-8. **Recommended Next Action** — The smallest proportionate next step.
-9. **Recommendation Rationale** — Evidence, trade-offs, risk, and reasoning chain.
-10. **What Could Change This Recommendation** — Specific findings or conditions.
-11. **Human Validation Required** — Who must review what before commitment.
+### 1. In-Chat Response Summary
 
-Add only the stage-specific module(s) needed:
+The direct assistant message in chat must be concise (3–5 bullet points). Do not duplicate the full text of the review in chat. Provide:
 
-### `PROBLEM_VALIDATION`
+- **Decision Question & Primary Recommendation:** (e.g., *Validate First*, *Proceed*, *Narrow Scope*, *Stage Rollout*, *Defer / Stop*)
+- **Decision Stage & Confidence:** (e.g., `PROBLEM_VALIDATION` · Confidence: `MEDIUM` · Decision Risk: `MEDIUM-HIGH`)
+- **Critical Uncertainty:** The single most decision-critical unknown.
+- **Recommended Next Action:** The immediate, smallest next action.
+- **HTML Report Notification:** Explicit instruction for the user:
+  `👉 Interactive Decision Report generated: open product-decision-review.html`
 
-- Problem Hypothesis
-- Problem vs. Solution Check
-- Evidence Analysis
-- Evidence Quality
-- Problem Confidence
-- Missing Evidence (if any)
-- Recommended Evidence Collection (if any)
+### 2. Interactive HTML Report Requirements
 
-### `SOLUTION_EVALUATION`
+The generated HTML file must be visually intuitive, modern, responsive, and completely self-contained. It must follow these technical and design standards:
 
-- Candidate Solutions
-- Solution Hypothesis
-- Problem-Solution Fit
-- Business Alignment
-- Constraint Analysis
-- Impact / Effort Assessment
-- Risk Comparison
-- Trade-offs
-- Selected Solution Hypothesis
+1. **Desktop 2-Column (Left-Right) Layout**:
+   - On desktop screens (width ≥ 980px), use a high-signal **left-right layout**:
+     - **Left Column (~380–400px wide, sticky on scroll)**: Houses the **Main Verdict Block** and the **Critical Uncertainty Alert Card**. An executive or stakeholder can glance at the left column and immediately know the verdict, risk, and core blocker without scrolling.
+     - **Right Column (main content area)**: Houses the analytical body, starting with the **Dedicated Reasoning Chain**, followed by the **Action & Rationale**, and **Deep-Dive Tabs**.
+   - On mobile/tablet screens (< 980px), automatically collapse into a clean single-column flow in natural reading order.
+2. **Dedicated Reasoning Chain (Never Hidden Behind Tabs)**:
+   - The **Reasoning Chain** is the analytical spine of the review. It must have its own dedicated, permanent space at the top of the right column—**never tucked away inside a tab**.
+   - Renders each of the 6 interconnected logic links (`Problem → Root Cause → Intervention → Expected Behaviour → Outcome → Business Impact`) as visual cards with status tags (`Supported`, `Partially Supported`, `Assumed`, `Unknown`, `Contradicted`).
+3. **Zero External Dependencies**: Must NOT require external CDN stylesheets, Google Fonts, or external JavaScript libraries. All CSS and JavaScript must be embedded inline (`<style>` and `<script>`). Must open seamlessly offline or in air-gapped environments.
+4. **Modern System Aesthetics**:
+   - Modern system font stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`).
+   - Dark mode default (`body data-theme="dark"`) with a functional Light Mode toggle that adapts all backgrounds, cards, text colors, and borders via CSS variables.
+   - Clean card-based visual hierarchy, rounded borders (8–12px), subtle shadows, and status pills.
+   - Stage-specific accent colors:
+     - `PROBLEM_VALIDATION`: Blue (`#38bdf8`)
+     - `SOLUTION_EVALUATION`: Purple (`#a855f7`)
+     - `DECISION_READINESS`: Amber (`#f59e0b`)
+     - `ROLLOUT_ASSESSMENT`: Emerald (`#10b981`)
+5. **Print-Friendly Styling**: Must include `@media print` rules hiding interactive buttons/tabs and styling the cards cleanly for export to PDF or paper.
 
-### `DECISION_READINESS`
+### 3. Required HTML Visual Components & Page Structure
 
-- Decision Being Evaluated
-- Decision Chain Analysis
-- Known Information
-- Assumptions
-- Unknown Information
-- Decision Risk
-- Required Confidence
-- Readiness Assessment
+The interactive HTML report must contain the following core visual sections arranged in the desktop left-right architecture:
 
-### `ROLLOUT_ASSESSMENT`
+#### A. Header Toolbar & Quick Actions (Full Width)
+- **Brand Title**: "Product Decision Reviewer" with a visual badge (`PTR`).
+- **Quick Action Buttons**:
+  - `Copy Summary`: Copies a formatted executive summary to the clipboard and shows an animated toast notification.
+  - `Print / PDF`: Triggers `window.print()` for 1-click PDF export.
+  - `Theme Toggle`: Switches between Dark and Light mode.
 
-- Solution Being Released
-- Rollout Risk
-- Exposure Level
-- Reversibility
-- Recommended Rollout Strategy
-- Success Signals
-- Warning Signals
-- Rollback Conditions
+#### B. Left Column: Main Verdict Block (Sticky on Desktop)
+1. **Verdict & Decision Card**:
+   - **Status Badges Row**: Primary Stage pill, Confidence badge (`High`, `Medium`, `Low`), and Decision Risk badge (`Low`, `Medium`, `High`).
+   - **Prominent Verdict Banner**: Highlighted status banner with clear verdict text (`VALIDATE FIRST`, `PROCEED`, `NARROW SCOPE`, `STAGE ROLLOUT`, `DEFER / STOP`).
+   - **Decision Question**: Formulated as a clear, active choice (e.g., `Should we build X or validate Y first?`).
+   - **Decision Summary**: 2–3 sentences summarizing the assessment and core trade-off.
+   - **Metadata List**: Decision Owner, Proposed Commitment, Target Audience, and Reversibility.
+2. **Critical Uncertainty Alert Card**:
+   - High-contrast alert card anchored directly under the verdict, isolating the #1 decision-critical unknown that could invalidate the decision.
 
-Keep the response concise when the decision is simple. Use tables when comparing multiple options. Use explicit “unknown” or “not provided” labels rather than filling gaps with speculation by yourself.
+#### C. Right Column: Analytical Body & Deep-Dives
+1. **Dedicated Reasoning Chain (Permanent / Out of Tabs)**:
+   - Visual step-by-step flowchart mapping all 6 links:
+     `Problem → Root Cause → Intervention → Expected Behaviour → Outcome → Business Impact`
+   - Each node displays its role, clear description, and an evidence status tag:
+     - `Supported` (Green)
+     - `Partially Supported` (Blue)
+     - `Assumed` (Purple)
+     - `Unknown` (Amber)
+     - `Contradicted` (Red)
+2. **Recommended Next Action & Rationale**:
+   - **Next Action Hero Card**: Highlighted actionable box containing the immediate next step, owner, and timeline.
+   - **Rationale & Change Triggers Grid**: Side-by-side or stacked breakdown of why this action was selected and what specific findings or metrics would change this recommendation.
+3. **Deep-Dive Tabs (Granular Analytical Details)**:
+   - **Tab 1: Evidence & Assumptions Matrix**: Quick-filter pills (`All`, `Known`, `Believed`, `Assumed`, `Unknown`) with count indicators and evidence item cards showing source, claim, and reliability.
+   - **Tab 2: Stage Deep-Dive**: Dynamically populated for the active decision stage:
+     - `PROBLEM_VALIDATION`: Problem vs. Solution disguise check table and missing evidence required before building.
+     - `SOLUTION_EVALUATION`: Candidate Solutions comparison table (comparing Fit, Impact, Effort, Risk, Confidence, Reversibility) and Solution Hypothesis.
+     - `DECISION_READINESS`: Decision chain completeness assessment and risk vs. confidence threshold check.
+     - `ROLLOUT_ASSESSMENT`: Exposure strategy, success signals, warning indicators, and rollback conditions.
+   - **Tab 3: Human Validation & Sign-Off Checklist**: Clickable checklist for named stakeholder review gates (Product Owner, Engineering Lead, UX/Design, Legal/Compliance, Analytics) with a live progress bar (`X of Y Completed`) and `localStorage` persistence.
 
-When a machine-readable representation is requested, preserve the stable keys as mentioned in the example below:
+### 4. Machine-Readable Data Block
+
+Every generated HTML file must include an embedded `<script type="application/json" id="pdr-data">` tag containing the structured JSON representation:
 
 ```json
 {
+  "decisionTitle": "Should we build an AI onboarding assistant to fix setup drop-offs?",
   "decisionStage": "PROBLEM_VALIDATION",
+  "recommendation": "VALIDATE_FIRST",
   "confidence": "MEDIUM",
-  "recommendation": "",
-  "nextAction": "",
-  "criticalUncertainty": "",
-  "humanValidationRequired": []
+  "decisionRisk": "MEDIUM_HIGH",
+  "criticalUncertainty": "What specific friction causes users to abandon onboarding?",
+  "nextAction": "Instrument funnel events and interview 5 churned users to isolate root causes.",
+  "humanValidationRequired": [
+    { "role": "Product Manager", "action": "Confirm research-first approach" },
+    { "role": "Analytics Lead", "action": "Deliver step funnel telemetry" }
+  ]
 }
 ```
 
